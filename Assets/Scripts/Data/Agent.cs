@@ -8,10 +8,10 @@ namespace EcsTraining
     /// <summary>
     /// Stores the global data, episodes, steps and areas.
     /// </summary>
-    public struct AgentInfo: IComponentData
+    public struct AgentInfo
     {
         //public ActionBuffers StoredActions;
-        public NativeArray<bool> DiscreteActionMasks;
+        //public NativeArray<bool> DiscreteActionMasks;
         public float Reward;
         public float GroupReward;
         public bool Done;
@@ -22,6 +22,20 @@ namespace EcsTraining
         /*public void ClearActions()
         {
             StoredActions.Clear();
+        }*/
+        
+        /*public void CopyActions()
+        {
+            var continuousActions = storedActions.ContinuousActions;
+            for (var i = 0; i < actionBuffers.ContinuousActions.Length; i++)
+            {
+                continuousActions[i] = actionBuffers.ContinuousActions[i];
+            }
+            var discreteActions = storedActions.DiscreteActions;
+            for (var i = 0; i < actionBuffers.DiscreteActions.Length; i++)
+            {
+                discreteActions[i] = actionBuffers.DiscreteActions[i];
+            }
         }*/
     }
     
@@ -35,6 +49,7 @@ namespace EcsTraining
         public float CumulativeReward;
         public bool RequestAction;   //TODO: should be IEnableComponent?
         public bool RequestDecision; //TODO: should be IEnableComponent?
+        public int MaxStep;
         public int StepCount;
         public int CompletedEpisodes;
         public int EpisodeId;
@@ -44,5 +59,14 @@ namespace EcsTraining
         //ActuatorManager / List<IActuator>
         public int GroupId;
         public bool IsEnabled;      //TODO: should be IEnableComponent?
+    }
+
+    public struct AgentSimple : IComponentData
+    {
+        public float Reward;
+        public bool RequestAction;   //TODO: should be IEnableComponent?
+        public bool RequestDecision; //TODO: should be IEnableComponent?
+        public int StepCount;
+        public int EpisodeId;
     }
 }
