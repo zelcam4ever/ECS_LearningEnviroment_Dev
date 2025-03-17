@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
-public class CommunicatorManager : MonoBehaviour
+namespace EcsTraining
+{ 
+public static class CommunicatorManager 
 {
     /// Pointer to the communicator currently in use by the Academy.
-    internal ICommunicator Communicator;
+    internal static ICommunicator Communicator;
     
-    bool m_Initialized;
+    static bool m_Initialized;
     
     /// <summary>
     /// Unity package version of com.unity.ml-agents.
@@ -24,31 +27,31 @@ public class CommunicatorManager : MonoBehaviour
     const string k_ApiVersion = "1.5.0";
     
     // Random seed used for inference.
-    int m_InferenceSeed;
+    static int m_InferenceSeed;
 
     /// <summary>
     /// Set the random seed used for inference. This should be set before any Agents are added
     /// to the scene. The seed is passed to the ModelRunner constructor, and incremented each
     /// time a new ModelRunner is created.
     /// </summary>
-    public int InferenceSeed
+    public static int InferenceSeed
     {
         set { m_InferenceSeed = value; }
     }
     
-    int m_NumAreas;
+    static int m_NumAreas;
 
     /// <summary>
     /// Number of training areas to instantiate.
     /// </summary>
-    public int NumAreas => m_NumAreas;
+    public static int NumAreas => m_NumAreas;
     
     /// <summary>
     /// Returns the RLCapabilities of the python client that the unity process is connected to.
     /// </summary>
-    internal UnityRLCapabilities TrainerCapabilities { get; set; }
+    internal static UnityRLCapabilities TrainerCapabilities { get; set; }
     
-    private void Awake()
+    public static void AwakeCalled()
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
         if (!CommunicatorFactory.CommunicatorRegistered)
@@ -94,7 +97,7 @@ public class CommunicatorManager : MonoBehaviour
         }
     }
 
-    internal void LazyInitialize()
+    internal static void LazyInitialize()
     {
         if (!m_Initialized)
         {
@@ -105,7 +108,7 @@ public class CommunicatorManager : MonoBehaviour
     /// <summary>
     /// Initializes the environment, configures it and initializes the Academy.
     /// </summary>
-    void InitializingAcademy()
+    static void InitializingAcademy()
     {
         //var port = ReadPortFromArgs();
         var port = 5004;
@@ -151,7 +154,7 @@ public class CommunicatorManager : MonoBehaviour
             else
             {
                 Debug.Log($"Couldn't connect to trainer on port {port} using API version {k_ApiVersion}. Will perform inference instead.");
-                Communicator = null;
+                Communicator = null; 
             }
         }
         catch (Exception ex)
@@ -161,8 +164,25 @@ public class CommunicatorManager : MonoBehaviour
         }
     }
 
-    void PutObservation(string behaviorName, AgentInfo info, List<ISensor> sensors)
+    //RemoteCommunicucator: Change
+    public static void PutObservation(string behaviorName, AgentInfo info, List<ISensor> sensors)
     {
         Communicator.PutObservations(behaviorName, info, sensors);
     }
+
+    public static void SubscribeBrain(string name, ActionSpec actionSpec)
+    {
+        Communicator.SubscribeBrain(name, actionSpec);
+    }
+
+    public static ActionBuffers DecideAction(string brainname, int id)
+    {
+        Communicator.DecideBatch();
+        Communicator?.DecideBatch();
+        var actions = Communicator?.GetActions(brainname, id);
+        //TODO: return ref m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
+        return actions ?? ActionBuffers.Empty;
+    }
 }
+}
+
