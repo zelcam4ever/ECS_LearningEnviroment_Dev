@@ -8,10 +8,11 @@ namespace EcsTraining
 {
     public partial struct InitializeEnvironmentSystem : ISystem
     {
-        [BurstCompile]
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<Training>();
+            CommunicatorManager.AwakeCalled();
+            AgentInfoManager.CreateAgentInfo();
         }
 
         [BurstCompile]

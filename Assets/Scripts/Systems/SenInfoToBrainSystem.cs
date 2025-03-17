@@ -1,11 +1,13 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using static Unity.Entities.SystemAPI;
 
 
 namespace EcsTraining
 {
+    [UpdateAfter(typeof(IncrementStepSystem))]
     public partial struct SenInfoToBrainSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -17,13 +19,13 @@ namespace EcsTraining
         {
             foreach (var agent in Query<RefRW<Agent>>())
             {
-                if (!agent.ValueRO.RequestAction) return;
+                if (!agent.ValueRO.RequestDecision) return;
                 //SendInfoToBrain() start:
-                
-                if (agent.ValueRO.InfoBrain.Done)
+                //var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                /*if (agentInfo.done)
                 {
                     //agent.ValueRW.InfoBrain ClearActions()
-                }
+                }*/
                 else
                 {
                     //agent.CopyActions(m_ActuatorManager.StoredActions);
@@ -32,25 +34,37 @@ namespace EcsTraining
                 //JOB: UpdateAllSensors(); && Collect all the Observations TODO: invedstigate how
                 
                 //m_ActuatorManager.WriteActionMask();
-                //agent.ValueRW.InfoBrain.DiscreteActionMasks = m_ActuatorManager.DiscreteActionMask?.GetMask();
-                agent.ValueRW.InfoBrain.Reward = agent.ValueRO.Reward;
-                agent.ValueRW.InfoBrain.GroupReward = agent.ValueRO.GroupReward;
-                agent.ValueRW.InfoBrain.Done = false;
-                agent.ValueRW.InfoBrain.MaxStepReached = false;
-                agent.ValueRW.InfoBrain.EpisodeId = agent.ValueRO.EpisodeId;
-                agent.ValueRW.InfoBrain.GroupId= agent.ValueRO.GroupId;
-                
+                //agentInfo.DiscreteActionMasks = m_ActuatorManager.DiscreteActionMask?.GetMask();
+                /*agentInfo.reward = agent.ValueRO.Reward;
+                agentInfo.groupReward = agent.ValueRO.GroupReward;
+                agentInfo.done = false;
+                agentInfo.maxStepReached = false;
+                agentInfo.episodeId = agent.ValueRO.EpisodeId;
+                agentInfo.groupId= agent.ValueRO.GroupId;*/
+
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+
+                agentInfo = new AgentInfo
+                {
+                    reward = agent.ValueRO.Reward,
+                    groupReward = agent.ValueRO.GroupReward,
+                    done = false,
+                    maxStepReached = false,
+                    episodeId = agent.ValueRO.EpisodeId,
+                    groupId = agent.ValueRO.GroupId
+                };
+
+                AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
+
                 //JOB: m_Brain.RequestDecision(m_Info, sensors);
-                
+
+                //Maybe agent.Entity.Brain? 
+
                 //DemonstrationWriters?
-                
+
                 //SendInfoToBrain() end:
-                
-                agent.ValueRW.Reward = 0;
-                agent.ValueRW.GroupReward = 0;
-                agent.ValueRW.RequestAction = false;
-                
-                
+
+
             }
         }
 

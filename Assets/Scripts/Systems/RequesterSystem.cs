@@ -1,0 +1,37 @@
+using Unity.Entities;
+using UnityEngine;
+using static Unity.Entities.SystemAPI;
+
+namespace EcsTraining
+{
+    /// <summary>
+    /// Equivalent to DecisionRequester. Iterates over all Agents and check whether they request Decision or Actions
+    /// </summary>
+    public partial struct RequesterSystem: ISystem
+    {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<AcademyTraining>();
+            state.RequireForUpdate<Training>();
+        }
+    
+        public void OnUpdate(ref SystemState state)
+        {
+            var academyStepCount = GetSingleton<AcademyTraining>().StepCount;
+            
+            foreach (var agent in Query<RefRW<Agent>>())
+            {
+                if (true)
+                {
+                    agent.ValueRW.RequestDecision = true;
+                    agent.ValueRW.RequestAction = true;
+                }
+
+                if (true)
+                {
+                    agent.ValueRW.RequestAction = true;
+                }
+            }
+        }
+    }
+}
