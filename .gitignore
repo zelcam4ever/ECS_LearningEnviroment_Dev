@@ -206,4 +206,10 @@ venv/
 # Results
 results/
 
+# Ignoring meta changes in ML-Agents
+Assets/ML-Agents
+Assets/ML-Agents.meta
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,unity,jetbrains+all
+
+
