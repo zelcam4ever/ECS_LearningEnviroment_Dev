@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.VisualScripting;
+using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining
@@ -14,19 +15,16 @@ namespace EcsTraining
 
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var agent in Query<RefRW<Agent>>())
+            foreach (var (agent, action) in Query<RefRW<Agent>, RefRO<Action>>())
             {
                 if (agent.ValueRO.RequestAction) //&& and brain!=null
                 {
                     agent.ValueRW.RequestAction = false;
                     //ActuatorManager.ExecuteActions();
+                    Debug.Log("Im doing the following action: " +action.ValueRO.Value);
                 }
 
-                if (agent.ValueRO.StepCount >= agent.ValueRO.MaxStep && agent.ValueRO.MaxStep > 0)
-                {
-                    //NotifyAgentDone(DoneReason.MaxStepReached);
-                    //_AgentReset()
-                }
+                
             }
         }
     }

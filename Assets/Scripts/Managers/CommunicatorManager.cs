@@ -167,6 +167,7 @@ public static class CommunicatorManager
     //RemoteCommunicucator: Change
     public static void PutObservation(string behaviorName, AgentInfo info, List<ISensor> sensors)
     {
+        Debug.Log(Communicator.ToString());
         Communicator.PutObservations(behaviorName, info, sensors);
     }
 
@@ -178,8 +179,7 @@ public static class CommunicatorManager
     public static ActionBuffers DecideAction(string brainname, int id)
     {
         Communicator.DecideBatch();
-        Communicator?.DecideBatch();
-        var actions = Communicator?.GetActions(brainname, id);
+        var actions = Communicator?.GetActions(brainname, 0);
         //TODO: return ref m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
         return actions ?? ActionBuffers.Empty;
     }

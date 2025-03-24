@@ -27,5 +27,9 @@ namespace EcsTraining
         //ActuatorManager / List<IActuator>
         public int GroupId;
         public bool IsEnabled;      //TODO: should be IEnableComponent?
+
+        public Entity Target;
     }
+
+    public struct AgentReset : IComponentData, IEnableableComponent {}
 }
