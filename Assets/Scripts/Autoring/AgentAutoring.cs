@@ -42,6 +42,9 @@ namespace EcsTraining
                 AddComponent(entity, new Action());
                 AddComponent(entity, new AgentReset());
                 SetComponentEnabled<AgentReset>(entity, false);
+                AddComponent(entity, new OnEpisodeBegin());
+                SetComponentEnabled<OnEpisodeBegin>(entity, false);
+                
             }
         }
     }

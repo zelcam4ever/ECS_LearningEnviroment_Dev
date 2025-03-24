@@ -21,7 +21,8 @@ namespace EcsTraining
                 Debug.Log("Reseted agent: " + agent.ValueRO.AgentInfoId);
                 agent.ValueRW.StepCount = 0;
                 SetComponentEnabled<AgentReset>(entity, false);
-                //TODO:OnEpisodeBegin();
+                //TODO:OnEpisodeBeginSystem BETTER
+                SetComponentEnabled<OnEpisodeBegin>(entity, true);
             }
         }
     }

@@ -32,4 +32,6 @@ namespace EcsTraining
     }
 
     public struct AgentReset : IComponentData, IEnableableComponent {}
+    
+    public struct OnEpisodeBegin : IComponentData, IEnableableComponent {}
 }
