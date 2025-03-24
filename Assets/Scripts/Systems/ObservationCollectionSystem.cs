@@ -5,7 +5,7 @@ using Unity.Jobs;
 using Unity.Mathematics;
 
 namespace EcsTraining
-{
+{ 
 public partial class ObservationCollectionSystem : SystemBase
 {
     public NativeStream PendingStream;
