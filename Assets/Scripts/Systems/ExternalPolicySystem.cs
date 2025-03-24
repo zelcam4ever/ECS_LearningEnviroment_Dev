@@ -16,19 +16,29 @@ namespace EcsTraining
         {
             state.RequireForUpdate<AcademyTraining>();
             state.RequireForUpdate<Training>();
-            CommunicatorManager.SubscribeBrain("a", new ActionSpec());
-            
+            CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{2}));
+            Debug.Log("BrainSubscribed");
         }
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach ((var agent, var policy) in 
-                     Query<RefRO<Agent>, RefRW<BrainSimple>>()
+            foreach (var (agent, policy, observation) in 
+                     Query<RefRW<Agent>, RefRW<BrainSimple>, RefRO<Observation>>()
                     .WithAll<RemotePolicy>())
             {
-                policy.ValueRW.AgentId = agent.ValueRO.EpisodeId;
+                if (!agent.ValueRO.RequestDecision) continue;
                 
-                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value,AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId),new List<ISensor>());
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var sensors = new List<ISensor>();
+                var vectorSensor = new VectorSensor(6);
+                vectorSensor.AddObservation(observation.ValueRO.OwnPosition);
+                vectorSensor.AddObservation(observation.ValueRO.TargetPosition);
+                sensors.Add(vectorSensor);
+                CommunicatorManager.PutObservation("a", agentInfo, sensors);
+                
+                agent.ValueRW.Reward = 0f;
+                agent.ValueRW.GroupReward = 0f;
+                agent.ValueRW.RequestDecision = false;
             }
         }
     }
