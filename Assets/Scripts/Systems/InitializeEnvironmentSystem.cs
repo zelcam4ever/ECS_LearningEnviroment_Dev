@@ -6,19 +6,22 @@ using UnityEngine;
 
 namespace EcsTraining
 {
+    [UpdateBefore(typeof(IncrementStepSystem))]
     public partial struct InitializeEnvironmentSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<Training>();
+            Debug.Log("We cooking?");
             CommunicatorManager.AwakeCalled();
+            Debug.Log("Hola initialized");
             AgentInfoManager.CreateAgentInfo();
         }
 
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            
+
         }
         /*protected override void OnUpdate()        {
             
