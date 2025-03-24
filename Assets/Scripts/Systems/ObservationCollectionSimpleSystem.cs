@@ -9,7 +9,7 @@ using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining
 {
-    [UpdateBefore(typeof(SenInfoToBrainSystem))]
+    [UpdateAfter(typeof(IncrementStepSystem))]
     public partial struct ObservationCollectionSimpleSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -23,6 +23,17 @@ namespace EcsTraining
             foreach (var (agent, transform, observation) in Query<RefRW<Agent>,RefRO<LocalTransform>,RefRW<Observation>>())
             {
                 if(!agent.ValueRO.RequestDecision) continue;
+                
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                if (agentInfo.done)
+                {
+                    agentInfo.ClearActions();
+                }
+                else
+                {
+                    //agentInfo.CopyActions(m_ActuatorManager.StoredActions);
+                }
+                AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
                 
                 //TODO: Change observation system to observation components + parallelJob
                 observation.ValueRW.OwnPosition = transform.ValueRO.Position;

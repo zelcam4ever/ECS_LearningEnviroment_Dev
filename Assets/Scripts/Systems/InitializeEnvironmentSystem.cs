@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace EcsTraining
 {
-    [UpdateBefore(typeof(IncrementStepSystem))]
+    [UpdateBefore(typeof(RequesterSystem))]
     public partial struct InitializeEnvironmentSystem : ISystem
     {
         public void OnCreate(ref SystemState state)

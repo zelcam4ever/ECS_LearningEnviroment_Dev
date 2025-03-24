@@ -7,6 +7,7 @@ namespace EcsTraining
     /// <summary>
     /// Equivalent to DecisionRequester. Iterates over all Agents and check whether they request Decision or Actions
     /// </summary>
+    [UpdateAfter(typeof(InitializeEnvironmentSystem))]
     public partial struct RequesterSystem: ISystem
     {
         public void OnCreate(ref SystemState state)

@@ -7,7 +7,7 @@ using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining
 {
-    [UpdateAfter(typeof(IncrementStepSystem))]
+    [UpdateAfter(typeof(ObservationCollectionSimpleSystem))]
     public partial struct SenInfoToBrainSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
