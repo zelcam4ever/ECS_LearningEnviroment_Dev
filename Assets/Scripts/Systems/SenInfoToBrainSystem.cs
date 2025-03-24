@@ -19,7 +19,7 @@ namespace EcsTraining
         {
             foreach (var agent in Query<RefRW<Agent>>())
             {
-                if (!agent.ValueRO.RequestDecision) return;
+                if (!agent.ValueRO.RequestDecision) continue;
                 //SendInfoToBrain() start:
                 //var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
                 /*if (agentInfo.done)
@@ -44,15 +44,12 @@ namespace EcsTraining
 
                 var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
 
-                agentInfo = new AgentInfo
-                {
-                    reward = agent.ValueRO.Reward,
-                    groupReward = agent.ValueRO.GroupReward,
-                    done = false,
-                    maxStepReached = false,
-                    episodeId = agent.ValueRO.EpisodeId,
-                    groupId = agent.ValueRO.GroupId
-                };
+                agentInfo.reward = agent.ValueRO.Reward;
+                agentInfo.groupReward = agent.ValueRO.GroupReward;
+                agentInfo.done = false;
+                agentInfo.maxStepReached = false;
+                agentInfo.episodeId = agent.ValueRO.EpisodeId;
+                agentInfo.groupId = agent.ValueRO.GroupId;
 
                 AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
 
@@ -63,7 +60,6 @@ namespace EcsTraining
                 //DemonstrationWriters?
 
                 //SendInfoToBrain() end:
-
 
             }
         }

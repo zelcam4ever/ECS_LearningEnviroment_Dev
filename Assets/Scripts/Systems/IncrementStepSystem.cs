@@ -26,7 +26,6 @@ namespace EcsTraining
             foreach (var agent in Query<RefRW<Agent>>())
             {
                 agent.ValueRW.StepCount += 1;
-                agent.ValueRW.Reward += 1;
             }
         }
 
