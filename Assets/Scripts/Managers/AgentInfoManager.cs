@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
@@ -11,12 +12,14 @@ public static class AgentInfoManager
     private static Dictionary<int, AgentInfo> _agentInfos = new Dictionary<int, AgentInfo>();
     private static int _currentId;
     
-    public static int CreateAgentInfo()
+    public static void CreateAgentInfo()
     {
-        _currentId++;
         var agentInfo = new AgentInfo();
+        agentInfo.storedActions = new ActionBuffers(Array.Empty<float>(),
+            new int[1]
+        );
         _agentInfos.Add(_currentId, agentInfo);
-        return _currentId;
+        _currentId++;
     }
     
     public static AgentInfo GetAgentInfo(int id)

@@ -244,7 +244,7 @@ MonoBehaviour:
   RequestDecision: 0
   StepCount: 0
   EpisodeId: 0
-  AgentInfoId: 1
+  AgentInfoId: 0
   SpawnPoint: {fileID: 1975108770}
 --- !u!23 &1897935286
 MeshRenderer:
