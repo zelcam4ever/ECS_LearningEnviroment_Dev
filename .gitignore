@@ -203,4 +203,7 @@ $RECYCLE.BIN/
 # Virtul Environment
 venv/
 
+# Results
+results/
+
 # End of https://www.toptal.com/developers/gitignore/api/windows,unity,jetbrains+all
