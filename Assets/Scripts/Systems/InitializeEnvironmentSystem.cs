@@ -12,10 +12,7 @@ namespace EcsTraining
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<Training>();
-            Debug.Log("We cooking?");
             CommunicatorManager.AwakeCalled();
-            Debug.Log("Hola initialized");
-            AgentInfoManager.CreateAgentInfo();
         }
 
         [BurstCompile]

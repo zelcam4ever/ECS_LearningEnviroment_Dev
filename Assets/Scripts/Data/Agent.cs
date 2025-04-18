@@ -11,7 +11,6 @@ namespace EcsTraining
         //Reference to brain, maybe id?
         //BehaviourParameters (PolicyFactory)
         //public AgentInfo InfoBrain;
-        public int AgentInfoId;
         public float Reward;
         public float GroupReward;
         public float CumulativeReward;
@@ -29,6 +28,7 @@ namespace EcsTraining
         public bool IsEnabled;      //TODO: should be IEnableComponent?
 
         public Entity Target;
+        public Entity GoundRender;
     }
 
     public struct AgentReset : IComponentData, IEnableableComponent {}

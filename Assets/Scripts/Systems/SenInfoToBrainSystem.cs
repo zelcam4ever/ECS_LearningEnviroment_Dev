@@ -42,7 +42,7 @@ namespace EcsTraining
                 agentInfo.episodeId = agent.ValueRO.EpisodeId;
                 agentInfo.groupId= agent.ValueRO.GroupId;*/
 
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
 
                 agentInfo.reward = agent.ValueRO.Reward;
                 agentInfo.groupReward = agent.ValueRO.GroupReward;
@@ -51,7 +51,7 @@ namespace EcsTraining
                 agentInfo.episodeId = agent.ValueRO.EpisodeId;
                 agentInfo.groupId = agent.ValueRO.GroupId;
 
-                AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
+                AgentInfoManager.SetAgentInfo(agent.ValueRO.EpisodeId, agentInfo);
 
                 //JOB: m_Brain.RequestDecision(m_Info, sensors);
 

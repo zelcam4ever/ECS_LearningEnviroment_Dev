@@ -26,11 +26,12 @@ namespace EcsTraining
                 }*/
                 //var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
 
-                var actionBufferToCopy = CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,agent.ValueRO.AgentInfoId);
-
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var actionBufferToCopy = CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,agent.ValueRO.EpisodeId);
+                
+                Debug.Log($"Agent {agent.ValueRO.EpisodeId}: action taken: {actionBufferToCopy.DiscreteActions[0]}");
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
                 agentInfo.CopyActions(actionBufferToCopy);
-                AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
+                AgentInfoManager.SetAgentInfo(agent.ValueRO.EpisodeId, agentInfo);
                 
                 action.ValueRW.Value = actionBufferToCopy.DiscreteActions[0];
                 

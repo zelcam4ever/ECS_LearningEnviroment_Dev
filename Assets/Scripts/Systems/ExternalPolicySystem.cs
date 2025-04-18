@@ -16,7 +16,7 @@ namespace EcsTraining
         {
             state.RequireForUpdate<AcademyTraining>();
             state.RequireForUpdate<Training>();
-            CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{2}));
+            CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{4}));
             Debug.Log("BrainSubscribed");
         }
     
@@ -28,7 +28,7 @@ namespace EcsTraining
             {
                 if (!agent.ValueRO.RequestDecision) continue;
                 
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
                 var sensors = new List<ISensor>();
                 var vectorSensor = new VectorSensor(6);
                 vectorSensor.AddObservation(observation.ValueRO.OwnPosition);

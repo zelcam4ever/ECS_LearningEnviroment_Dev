@@ -18,7 +18,7 @@ namespace EcsTraining
             foreach (var (agent, entity) in Query<RefRW<Agent>>().WithAll<AgentReset>().WithEntityAccess())
             {
                 //TODO: ResetData();
-                Debug.Log("Reseted agent: " + agent.ValueRO.AgentInfoId);
+                Debug.Log("Reseted agent: " + agent.ValueRO.EpisodeId);
                 agent.ValueRW.StepCount = 0;
                 SetComponentEnabled<AgentReset>(entity, false);
                 //TODO:OnEpisodeBeginSystem BETTER

@@ -9,10 +9,10 @@ namespace EcsTraining
         public bool RequestAction;
         public bool RequestDecision;
         public int StepCount;
-        public int EpisodeId;
-        public int AgentInfoId;
+        public int MaxStep;
         
         public Transform SpawnPoint;
+        public Transform GroundRender;
         
         private class Baker : Baker<AgentAutoring>
         {
@@ -26,9 +26,10 @@ namespace EcsTraining
                     RequestAction = authoring.RequestAction,
                     RequestDecision = authoring.RequestDecision,
                     StepCount = authoring.StepCount,
-                    EpisodeId = authoring.EpisodeId,
-                    AgentInfoId = authoring.AgentInfoId,
+                    MaxStep = authoring.MaxStep,
+                    EpisodeId = EpisodeIdCounter.GetEpisodeId(),
                     Target = GetEntity(authoring.SpawnPoint, TransformUsageFlags.Dynamic),
+                    GoundRender = GetEntity(authoring.GroundRender, TransformUsageFlags.None),
                 });
                 AddComponent(entity, new Observation() 
                 {

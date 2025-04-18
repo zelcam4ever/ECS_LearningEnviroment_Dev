@@ -175,10 +175,10 @@ public static class CommunicatorManager
         Communicator.SubscribeBrain(name, actionSpec);
     }
 
-    public static ActionBuffers DecideAction(string brainname, int id)
+    public static ActionBuffers DecideAction(string brainname, int agentId)
     {
         Communicator.DecideBatch();
-        var actions = Communicator?.GetActions(brainname, 0);
+        var actions = Communicator?.GetActions(brainname, agentId);
         //TODO: return ref m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
         return actions ?? ActionBuffers.Empty;
     }

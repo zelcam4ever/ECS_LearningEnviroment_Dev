@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -10,20 +11,29 @@ namespace EcsTraining
 public static class AgentInfoManager
 {
     private static Dictionary<int, AgentInfo> _agentInfos = new Dictionary<int, AgentInfo>();
-    private static int _currentId;
     
-    public static void CreateAgentInfo()
+    
+    /*public static void CreateAgentInfo(int id)
     {
         var agentInfo = new AgentInfo();
         agentInfo.storedActions = new ActionBuffers(Array.Empty<float>(),
-            new int[1]
+            new int[3]
         );
-        _agentInfos.Add(_currentId, agentInfo);
-        _currentId++;
-    }
+        _agentInfos.Add(id, agentInfo);
+    }*/
     
     public static AgentInfo GetAgentInfo(int id)
     {
+        if (!_agentInfos.ContainsKey(id))
+        {
+            Debug.Log("Created new agent info: " + id);
+            var agentInfo = new AgentInfo();
+            agentInfo.storedActions = new ActionBuffers(Array.Empty<float>(),
+                new int[3]
+            );
+            _agentInfos.Add(id, agentInfo);
+        }
+        
         return _agentInfos[id];
     }
 

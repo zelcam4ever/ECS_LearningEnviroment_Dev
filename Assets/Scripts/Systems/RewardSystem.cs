@@ -1,4 +1,6 @@
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
@@ -15,10 +17,18 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var agent in Query<RefRW<Agent>>())
+            foreach (var (agent, transform) in Query<RefRW<Agent>, RefRO<LocalTransform>>())
             {
-                agent.ValueRW.Reward += 1;
-                agent.ValueRW.CumulativeReward += 1;
+                float reward = 0f;
+                if (math.distance(transform.ValueRO.Position,
+                        GetComponent<LocalTransform>(agent.ValueRO.Target).Position) < 0.5f)
+                {
+                    reward = 100f;
+                }
+                else reward -= 0.1f;
+
+                agent.ValueRW.Reward += reward;
+                agent.ValueRW.CumulativeReward += reward;
             }
         }
     }

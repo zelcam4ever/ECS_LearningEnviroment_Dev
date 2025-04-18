@@ -24,7 +24,7 @@ namespace EcsTraining
             {
                 if(!agent.ValueRO.RequestDecision) continue;
                 
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
                 if (agentInfo.done)
                 {
                     agentInfo.ClearActions();
@@ -33,7 +33,7 @@ namespace EcsTraining
                 {
                     //agentInfo.CopyActions(m_ActuatorManager.StoredActions);
                 }
-                AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
+                AgentInfoManager.SetAgentInfo(agent.ValueRO.EpisodeId, agentInfo);
                 
                 //TODO: Change observation system to observation components + parallelJob
                 observation.ValueRW.OwnPosition = transform.ValueRO.Position;
