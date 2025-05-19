@@ -15,6 +15,7 @@ namespace EcsTraining
             state.RequireForUpdate<BrainSimple>();
         }
 
+        private int time;
         
         public void OnUpdate(ref SystemState state)
         {
