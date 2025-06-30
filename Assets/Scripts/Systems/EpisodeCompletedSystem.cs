@@ -47,9 +47,9 @@ namespace EcsTraining
                     SetComponent(agent.ValueRO.GoundRender, material);
                 }
                 
-                if(!isDone) return;
+                if(!isDone) continue;
 
-                agent.ValueRW.Done = true;
+                agent.ValueRW.Done = isDone;
                 agent.ValueRW.MaxStepReached = maxSteps;
 
                 if (agent.ValueRO.Reward > 50)

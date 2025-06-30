@@ -29,14 +29,25 @@ namespace EcsTraining
 
                 var actionBufferToCopy = CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,agent.ValueRO.EpisodeId);
                 
-                Debug.Log($"Agent {agent.ValueRO.EpisodeId}: action taken: {actionBufferToCopy.DiscreteActions[0]}");
+                /*if (actionBufferToCopy.IsEmpty())
+                {
+                    Debug.Log($"Agent {agent.ValueRO.EpisodeId}: No action taken!");
+                    continue;
+                }*/
+                //Debug.Log($"Agent {agent.ValueRO.EpisodeId}: action taken: {actionBufferToCopy.DiscreteActions[0]}");
                 
                 //Not necessary: Only important for logging
                 //agentInfo.CopyActions(actionBufferToCopy);
                 
                 //TODO Change / update?
-                action.ValueRW.Value = actionBufferToCopy.DiscreteActions[0];
-                
+                if (actionBufferToCopy.DiscreteActions.Length > 0)
+                {
+                    action.ValueRW.Value = actionBufferToCopy.DiscreteActions[0];
+                }
+                else action.ValueRW.Value = 0;
+
+
+
                 //agentInfo.CopyActions(actionBufferToCopy);
                 //AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
                 // m_ActuatorManager.UpdateActions(actions);

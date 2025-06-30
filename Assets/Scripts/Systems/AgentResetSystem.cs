@@ -21,6 +21,8 @@ namespace EcsTraining
                 //TODO: ResetData();
                 Debug.Log("Reseted agent: " + agent.ValueRO.EpisodeId);
                 agent.ValueRW.StepCount = 0;
+                agent.ValueRW.Done = false;
+                agent.ValueRW.MaxStepReached = false;
                 SetComponentEnabled<AgentReset>(entity, false);
                 //TODO:OnEpisodeBeginSystem BETTER
                 SetComponentEnabled<OnEpisodeBegin>(entity, true);
