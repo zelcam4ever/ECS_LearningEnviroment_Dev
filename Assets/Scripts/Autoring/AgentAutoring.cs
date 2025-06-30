@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.MLAgents;
 using UnityEngine;
 
 namespace EcsTraining
@@ -20,7 +21,7 @@ namespace EcsTraining
             {
             
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new Agent() 
+                AddComponent(entity, new AgentEcs() 
                 {
                     Reward = authoring.Reward,
                     RequestAction = authoring.RequestAction,

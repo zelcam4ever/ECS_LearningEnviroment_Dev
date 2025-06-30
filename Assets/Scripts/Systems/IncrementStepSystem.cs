@@ -1,5 +1,6 @@
 using Unity.Burst;
 using Unity.Entities;
+using Unity.MLAgents;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
@@ -23,7 +24,7 @@ namespace EcsTraining
             GetSingletonRW<AcademyTraining>().ValueRW.StepCount+=1;
             GetSingletonRW<AcademyTraining>().ValueRW.TotalStepCount+=1;
             
-            foreach (var agent in Query<RefRW<Agent>>())
+            foreach (var agent in Query<RefRW<AgentEcs>>())
             {
                 agent.ValueRW.StepCount += 1;
             }

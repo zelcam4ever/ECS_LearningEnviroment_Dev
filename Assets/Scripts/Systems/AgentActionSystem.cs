@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.MLAgents;
 using Unity.Transforms;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace EcsTraining
 
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, action, transform) in Query<RefRW<Agent>, RefRO<Action>, RefRW<LocalTransform>>())
+            foreach (var (agent, action, transform) in Query<RefRW<AgentEcs>, RefRO<Action>, RefRW<LocalTransform>>())
             {
                 if (agent.ValueRO.RequestAction) //&& and brain!=null
                 {

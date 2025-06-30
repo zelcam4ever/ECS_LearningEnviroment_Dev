@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.MLAgents;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
@@ -15,7 +16,7 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, entity) in Query<RefRW<Agent>>().WithAll<AgentReset>().WithEntityAccess())
+            foreach (var (agent, entity) in Query<RefRW<AgentEcs>>().WithAll<AgentReset>().WithEntityAccess())
             {
                 //TODO: ResetData();
                 Debug.Log("Reseted agent: " + agent.ValueRO.EpisodeId);

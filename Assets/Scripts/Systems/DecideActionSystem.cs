@@ -19,7 +19,7 @@ namespace EcsTraining
         
         public void OnUpdate(ref SystemState state)
         {
-            foreach ((var agent, var brain, var action) in Query<RefRW<Agent>, RefRO<BrainSimple>,RefRW<Action>>())
+            foreach (var (agent, brain, action) in Query<RefRO<AgentEcs>, RefRO<BrainSimple>,RefRW<Action>>())
             {
                 /*if (m_ActuatorManager.StoredActions.ContinuousActions.Array == null)
                 {

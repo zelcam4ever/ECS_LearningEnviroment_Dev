@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.MLAgents;
 using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
@@ -18,7 +19,7 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, transform, entity) in Query<RefRW<Agent>, RefRW<LocalTransform>>().WithAll<OnEpisodeBegin>().WithEntityAccess())
+            foreach (var (agent, transform, entity) in Query<RefRO<AgentEcs>, RefRW<LocalTransform>>().WithAll<OnEpisodeBegin>().WithEntityAccess())
             {
                 transform.ValueRW.Position = new float3(0, 0, Mathf.Ceil(Random.Range(-2f,2f)));
                 var targetTransform = GetComponent<LocalTransform>(agent.ValueRO.Target);

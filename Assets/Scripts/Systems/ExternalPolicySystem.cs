@@ -9,7 +9,7 @@ using static Unity.Entities.SystemAPI;
 namespace EcsTraining
 {
     //RequestDecision() in RemotePolicy
-    [UpdateAfter(typeof(SenInfoToBrainSystem))]
+    [UpdateAfter(typeof(ObservationCollectionSimpleSystem))]
     public partial struct ExternalPolicySystem : ISystem
     {
         public void OnCreate(ref SystemState state)

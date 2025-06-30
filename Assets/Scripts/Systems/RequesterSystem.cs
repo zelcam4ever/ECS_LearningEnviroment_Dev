@@ -1,4 +1,5 @@
 using Unity.Entities;
+using Unity.MLAgents;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
@@ -20,7 +21,7 @@ namespace EcsTraining
         {
             var academyStepCount = GetSingleton<AcademyTraining>().StepCount;
             
-            foreach (var agent in Query<RefRW<Agent>>())
+            foreach (var agent in Query<RefRW<AgentEcs>>())
             {
                 if (true)
                 {

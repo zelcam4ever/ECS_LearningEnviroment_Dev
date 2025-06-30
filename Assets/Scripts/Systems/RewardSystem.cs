@@ -1,5 +1,6 @@
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.MLAgents;
 using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
@@ -17,7 +18,7 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, transform) in Query<RefRW<Agent>, RefRO<LocalTransform>>())
+            foreach (var (agent, transform) in Query<RefRW<AgentEcs>, RefRO<LocalTransform>>())
             {
                 float reward = 0f;
                 if (math.distance(transform.ValueRO.Position,
