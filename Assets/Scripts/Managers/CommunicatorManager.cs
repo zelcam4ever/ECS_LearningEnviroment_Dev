@@ -165,7 +165,7 @@ public static class CommunicatorManager
     }
 
     //RemoteCommunicucator: Change
-    public static void PutObservation(string behaviorName, AgentInfo info, List<ISensor> sensors)
+    public static void PutObservation(string behaviorName, AgentEcs info, List<ISensor> sensors)
     {
         Communicator.PutObservations(behaviorName, info, sensors);
     }

@@ -23,18 +23,17 @@ namespace EcsTraining
         public void OnUpdate(ref SystemState state)
         {
             foreach (var (agent, policy, observation) in 
-                     Query<RefRW<Agent>, RefRW<BrainSimple>, RefRO<Observation>>()
+                     Query<RefRW<AgentEcs>, RefRW<BrainSimple>, RefRO<Observation>>()
                     .WithAll<RemotePolicy>())
             {
                 if (!agent.ValueRO.RequestDecision) continue;
                 
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
                 var sensors = new List<ISensor>();
                 var vectorSensor = new VectorSensor(6);
                 vectorSensor.AddObservation(observation.ValueRO.OwnPosition);
                 vectorSensor.AddObservation(observation.ValueRO.TargetPosition);
                 sensors.Add(vectorSensor);
-                CommunicatorManager.PutObservation("a", agentInfo, sensors);
+                CommunicatorManager.PutObservation("a", agent.ValueRO, sensors);
                 
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;

@@ -41,17 +41,7 @@ namespace EcsTraining
                 agentInfo.maxStepReached = false;
                 agentInfo.episodeId = agent.ValueRO.EpisodeId;
                 agentInfo.groupId= agent.ValueRO.GroupId;*/
-
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
-
-                agentInfo.reward = agent.ValueRO.Reward;
-                agentInfo.groupReward = agent.ValueRO.GroupReward;
-                agentInfo.done = false;
-                agentInfo.maxStepReached = false;
-                agentInfo.episodeId = agent.ValueRO.EpisodeId;
-                agentInfo.groupId = agent.ValueRO.GroupId;
-
-                AgentInfoManager.SetAgentInfo(agent.ValueRO.EpisodeId, agentInfo);
+                
 
                 //JOB: m_Brain.RequestDecision(m_Info, sensors);
 

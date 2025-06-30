@@ -23,7 +23,7 @@ namespace EcsTraining
         public void OnUpdate(ref SystemState state)
         {
             
-            foreach (var (agent,transform, entity) in Query<RefRW<Agent>, RefRO<LocalTransform>>().WithPresent<AgentReset>().WithEntityAccess())
+            foreach (var (agent,transform, entity) in Query<RefRW<AgentEcs>, RefRO<LocalTransform>>().WithPresent<AgentReset>().WithEntityAccess())
             {
                 var isDone = false;
                 var maxSteps = false; //TODO: Changeplease
@@ -48,21 +48,13 @@ namespace EcsTraining
                 }
                 
                 if(!isDone) return;
-                var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.EpisodeId);
-                
 
-                agentInfo = new AgentInfo
+                agent.ValueRW.Done = true;
+                agent.ValueRW.MaxStepReached = maxSteps;
+
+                if (agent.ValueRO.Reward > 50)
                 {
-                    episodeId = agent.ValueRO.EpisodeId,
-                    reward = agent.ValueRO.Reward,
-                    groupReward = agent.ValueRO.GroupReward,
-                    done = true,
-                    maxStepReached = maxSteps,
-                    groupId = agent.ValueRO.GroupId
-                };
-                if (agentInfo.reward > 50)
-                {
-                    Debug.Log($"Sending huge Reward in id:{agentInfo.episodeId}");
+                    Debug.Log($"Sending huge Reward in id:{agent.ValueRO.EpisodeId}");
                 }
                 //TODO: Update sensors
                 //TODO: CollectObservations
@@ -73,7 +65,7 @@ namespace EcsTraining
                 var targetPosition = GetComponent<LocalTransform>(agent.ValueRO.Target).Position;
                 vectorSensor.AddObservation(targetPosition);
                 sensors.Add(vectorSensor);
-                CommunicatorManager.PutObservation("a", agentInfo, sensors);
+                CommunicatorManager.PutObservation("a", agent.ValueRO, sensors);
                 //TODO: DemonstrationWriter
                 //TODO: Reset sensors*/
                     
