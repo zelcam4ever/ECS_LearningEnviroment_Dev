@@ -250,6 +250,7 @@ namespace Unity.MLAgents
         /// </summary>
         protected Academy()
         {
+            Debug.LogWarning("Academy should not be created. CommunicatorManager is in use.");
             Application.quitting += Dispose;
 #if UNITY_EDITOR || UNITY_STANDALONE
             if (!CommunicatorFactory.CommunicatorRegistered)

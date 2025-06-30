@@ -200,7 +200,7 @@ namespace Unity.MLAgents
                 ActionSpec = ToActionSpecProto(actionSpec),
             };
 
-            var supportHybrid = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.HybridActions;
+            /*var supportHybrid = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.HybridActions;
             if (!supportHybrid)
             {
                 actionSpec.CheckAllContinuousOrDiscrete();
@@ -214,7 +214,7 @@ namespace Unity.MLAgents
                     brainParametersProto.VectorActionSizeDeprecated.AddRange(actionSpec.BranchSizes);
                     brainParametersProto.VectorActionSpaceTypeDeprecated = SpaceTypeProto.Discrete;
                 }
-            }
+            }*/
 
             // TODO handle ActionDescriptions?
             return brainParametersProto;
