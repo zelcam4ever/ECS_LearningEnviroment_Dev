@@ -95,10 +95,42 @@ namespace Unity.MLAgents
             return agentInfoProto;
         }
 
-        /*public static AgentInfoProto ToAgentInfoProto(this EcsTraining.Agent ai)
+        public static AgentInfoProto ToAgentInfoProto(this AgentEcs ai)
         {
-            
-        }*/
+            if (ai.GroupId > 0)
+            {
+                var trainerCanHandle = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.MultiAgentGroups;
+                if (!trainerCanHandle)
+                {
+                    if (!s_HaveWarnedTrainerCapabilitiesAgentGroup)
+                    {
+                        Debug.LogWarning(
+                            $"Attached trainer doesn't support Multi Agent Groups; group rewards will be ignored." +
+                            "Please find the versions that work best together from our release page: " +
+                            "https://github.com/Unity-Technologies/ml-agents/releases"
+                        );
+                        s_HaveWarnedTrainerCapabilitiesAgentGroup = true;
+                    }
+                }
+            }
+            var agentInfoProto = new AgentInfoProto
+            {
+                Reward = ai.Reward,
+                GroupReward = ai.GroupReward,
+                MaxStepReached = ai.MaxStepReached,
+                Done = ai.Done,
+                Id = ai.EpisodeId,
+                GroupId = ai.GroupId,
+            };
+
+            //TODO: Adding discreteActionMasks
+            /*if (ai.discreteActionMasks != null)
+            {
+                agentInfoProto.ActionMask.AddRange(ai.discreteActionMasks);
+            }*/
+
+            return agentInfoProto;
+        }
 
         /// <summary>
         /// Get summaries for the observations in the AgentInfo part of the AgentInfoActionPairProto.

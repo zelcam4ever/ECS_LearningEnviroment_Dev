@@ -27,6 +27,10 @@ namespace EcsTraining
         public int GroupId;
         public bool IsEnabled;      //TODO: should be IEnableComponent?
 
+        //Adding From AgentInfo
+        public bool MaxStepReached;
+        public bool Done;
+        
         public Entity Target;
         public Entity GoundRender;
     }

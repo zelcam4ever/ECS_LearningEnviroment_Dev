@@ -4,7 +4,9 @@
     "references": [
         "Unity.ML-Agents.CommunicatorObjects",
         "Unity.Mathematics",
-        "Unity.Sentis"
+        "Unity.Sentis",
+        "Unity.Entities",
+        "Unity.Collections"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

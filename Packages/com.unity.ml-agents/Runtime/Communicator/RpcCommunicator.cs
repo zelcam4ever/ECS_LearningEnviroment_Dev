@@ -378,6 +378,51 @@ namespace Unity.MLAgents
                 m_LastActionsReceived[behaviorName].Remove(info.episodeId);
             }
         }
+        
+        public void PutObservations(string behaviorName, AgentEcs info, List<ISensor> sensors)
+        {
+#if DEBUG
+            if (!m_SensorShapeValidators.ContainsKey(behaviorName))
+            {
+                m_SensorShapeValidators[behaviorName] = new SensorShapeValidator();
+            }
+            m_SensorShapeValidators[behaviorName].ValidateSensors(sensors);
+#endif
+
+            using (TimerStack.Instance.Scoped("AgentInfo.ToProto"))
+            {
+                var agentInfoProto = info.ToAgentInfoProto();
+
+                using (TimerStack.Instance.Scoped("GenerateSensorData"))
+                {
+                    foreach (var sensor in sensors)
+                    {
+                        var obsProto = sensor.GetObservationProto(m_ObservationWriter);
+                        agentInfoProto.Observations.Add(obsProto);
+                    }
+                }
+                m_CurrentUnityRlOutput.AgentInfos[behaviorName].Value.Add(agentInfoProto);
+            }
+
+            m_NeedCommunicateThisStep = true;
+            if (!m_OrderedAgentsRequestingDecisions.ContainsKey(behaviorName))
+            {
+                m_OrderedAgentsRequestingDecisions[behaviorName] = new List<int>();
+            }
+            if (!info.Done)
+            {
+                m_OrderedAgentsRequestingDecisions[behaviorName].Add(info.EpisodeId);
+            }
+            if (!m_LastActionsReceived.ContainsKey(behaviorName))
+            {
+                m_LastActionsReceived[behaviorName] = new Dictionary<int, ActionBuffers>();
+            }
+            m_LastActionsReceived[behaviorName][info.EpisodeId] = ActionBuffers.Empty;
+            if (info.Done)
+            {
+                m_LastActionsReceived[behaviorName].Remove(info.EpisodeId);
+            }
+        }
 
         /// <summary>
         /// Helper method that sends the current UnityRLOutput, receives the next UnityInput and

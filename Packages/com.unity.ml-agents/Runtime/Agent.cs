@@ -9,6 +9,7 @@ using Unity.MLAgents.Sensors.Reflection;
 using Unity.MLAgents.Demonstrations;
 using Unity.MLAgents.Policies;
 using UnityEngine.Serialization;
+using Unity.Entities;
 
 namespace Unity.MLAgents
 {
@@ -85,6 +86,35 @@ namespace Unity.MLAgents
                 discreteActions[i] = actionBuffers.DiscreteActions[i];
             }
         }
+    }
+    
+    public struct AgentEcs : IComponentData
+    {
+        //Reference to brain, maybe id?
+        //BehaviourParameters (PolicyFactory)
+        //public AgentInfo InfoBrain;
+        public float Reward;
+        public float GroupReward;
+        public float CumulativeReward;
+        public bool RequestAction;   //TODO: should be IEnableComponent?
+        public bool RequestDecision; //TODO: should be IEnableComponent?
+        public int MaxStep;
+        public int StepCount;
+        public int CompletedEpisodes;
+        public int EpisodeId;
+        public bool Initialized;
+        //List<ISensor> sensors;
+        //StackingSensor
+        //ActuatorManager / List<IActuator>
+        public int GroupId;
+        public bool IsEnabled;      //TODO: should be IEnableComponent?
+
+        //Adding From AgentInfo
+        public bool MaxStepReached;
+        public bool Done;
+
+        public Entity Target;
+        public Entity GoundRender;
     }
 
     /// <summary>
