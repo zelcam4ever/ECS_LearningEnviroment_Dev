@@ -6,12 +6,9 @@ namespace EcsTraining
 {
     public class AgentAutoring: MonoBehaviour
     {
-        public float Reward;
-        public bool RequestAction;
-        public bool RequestDecision;
-        public int StepCount;
         public int MaxStep;
         
+        public ObservationSourceType[] observationSetup;
         public Transform SpawnPoint;
         public Transform GroundRender;
         
@@ -23,10 +20,6 @@ namespace EcsTraining
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent(entity, new AgentEcs() 
                 {
-                    Reward = authoring.Reward,
-                    RequestAction = authoring.RequestAction,
-                    RequestDecision = authoring.RequestDecision,
-                    StepCount = authoring.StepCount,
                     MaxStep = authoring.MaxStep,
                     EpisodeId = EpisodeIdCounter.GetEpisodeId(),
                     Target = GetEntity(authoring.SpawnPoint, TransformUsageFlags.Dynamic),
@@ -36,6 +29,21 @@ namespace EcsTraining
                 {
                     //TargetPosition = GetEntity(authoring.SpawnPoint, TransformUsageFlags.Dynamic),
                 });
+                
+                // 1. Add the DynamicBuffer for the final float values
+                DynamicBuffer<ObservationValue> observations = AddBuffer<ObservationValue>(entity);
+                // Resize the buffer to match the setup. It will be filled each frame.
+                observations.ResizeUninitialized(authoring.observationSetup.Length);
+
+                // 2. Add a separate buffer to store the *configuration*
+                // This tells our systems WHERE to get the data from.
+                DynamicBuffer<ObservationSource> sources = AddBuffer<ObservationSource>(entity);
+                sources.Capacity = authoring.observationSetup.Length;
+                foreach (var sourceType in authoring.observationSetup)
+                {
+                    sources.Add(new ObservationSource { SourceType = sourceType });
+                }
+                
                 AddComponent(entity, new RemotePolicy());
                 AddComponent(entity, new BrainSimple() 
                 {
