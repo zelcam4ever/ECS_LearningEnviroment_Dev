@@ -1,31 +1,63 @@
+using System.Collections.Generic;
 using Unity.Entities;
 using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining
 {
     [UpdateAfter(typeof(EpisodeCompletedSystem))]
-    public partial struct AgentResetSystem : ISystem
+    public partial class AgentResetSystem : SystemBase
     {
-        public void OnCreate(ref SystemState state)
+        private List<ISensor> _sensors;
+        private VectorSensor _vectorObservation;
+
+        protected override void OnCreate()
         {
-            state.RequireForUpdate<AcademyTraining>();
-            state.RequireForUpdate<Training>();
+            //Change
+            _sensors = new List<ISensor> { null };
+            _vectorObservation = new VectorSensor(4);
         }
-    
-        public void OnUpdate(ref SystemState state)
+
+        protected override void OnUpdate()
         {
-            foreach (var (agent, entity) in Query<RefRW<AgentEcs>>().WithAll<AgentReset>().WithEntityAccess())
+            foreach (var (agent, policy, observations) in
+                     Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
+                         .WithAll<RemotePolicy>())
             {
-                //TODO: ResetData();
-                Debug.Log("Reseted agent: " + agent.ValueRO.EpisodeId);
+                if(!agent.ValueRO.Done) continue;
+                
+                if (agent.ValueRO.Reward > 50)
+                {
+                    Debug.Log($"Sending huge Reward in id:{agent.ValueRO.EpisodeId}");
+                }
+
+                var observationArray = new float[observations.Length];
+                for (int i = 0; i < observations.Length; i++)
+                {
+                    observationArray[i] = observations[i].Value;
+                }
+                
+                _vectorObservation.Reset();
+                _vectorObservation.AddObservation(observationArray);
+                _sensors[0] = _vectorObservation;
+                
+                CommunicatorManager.PutObservation("a", agent.ValueRO, _sensors);
+                    
+                Debug.Log("Resetting agent: " + agent.ValueRO.EpisodeId);
+                
+                agent.ValueRW.CompletedEpisodes += 1;
+                agent.ValueRW.Reward = 0f;
+                agent.ValueRW.GroupReward = 0f;
+                agent.ValueRW.CumulativeReward = 0f;
+                agent.ValueRW.RequestAction = false;
+                agent.ValueRW.RequestDecision = false;
                 agent.ValueRW.StepCount = 0;
                 agent.ValueRW.Done = false;
                 agent.ValueRW.MaxStepReached = false;
-                SetComponentEnabled<AgentReset>(entity, false);
-                //TODO:OnEpisodeBeginSystem BETTER
-                SetComponentEnabled<OnEpisodeBegin>(entity, true);
+                
+                agent.ValueRW.StartingEpisode = true;
             }
         }
     }

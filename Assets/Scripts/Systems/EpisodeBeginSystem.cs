@@ -19,15 +19,16 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, transform, entity) in Query<RefRO<AgentEcs>, RefRW<LocalTransform>>().WithAll<OnEpisodeBegin>().WithEntityAccess())
+            foreach (var (agent, transform) in Query<RefRW<AgentEcs>, RefRW<LocalTransform>>())
             {
-                transform.ValueRW.Position = new float3(0, 0, Mathf.Ceil(Random.Range(-2f,2f)));
-                var targetTransform = GetComponent<LocalTransform>(agent.ValueRO.Target);
+                if(!agent.ValueRO.StartingEpisode) continue;
+                agent.ValueRW.StartingEpisode = false;
                 
+                transform.ValueRW.Position = new float3(0, 0, Mathf.Ceil(Random.Range(-2f,2f)));
+                
+                var targetTransform = GetComponent<LocalTransform>(agent.ValueRO.Target);
                 targetTransform.Position = new float3(Mathf.Ceil(Random.Range(5f, 8f)), 0, Mathf.Ceil(Random.Range(-3f,3f)));;
                 SetComponent(agent.ValueRO.Target, targetTransform);
-                
-                SetComponentEnabled<OnEpisodeBegin>(entity, false);
             }
         }
     }

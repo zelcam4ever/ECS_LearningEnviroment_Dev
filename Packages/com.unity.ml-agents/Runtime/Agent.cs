@@ -112,6 +112,7 @@ namespace Unity.MLAgents
         //Adding From AgentInfo
         public bool MaxStepReached;
         public bool Done;
+        public bool StartingEpisode;
 
         public Entity Target;
         public Entity GoundRender;

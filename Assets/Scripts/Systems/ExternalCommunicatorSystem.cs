@@ -39,6 +39,7 @@ namespace EcsTraining
         {
             if(!_isInitialized)CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{4}));
             _isInitialized = true;
+            
             foreach (var (agent, policy, observations) in
                      Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy>())
@@ -53,7 +54,6 @@ namespace EcsTraining
                 
                 _vectorObservation.Reset();
                 _vectorObservation.AddObservation(observationArray);
-                Debug.Log(_vectorObservation.GetObservationSpec().Shape);
                 _sensors[0] = _vectorObservation;
                 
                 CommunicatorManager.PutObservation("a", agent.ValueRO, _sensors);
