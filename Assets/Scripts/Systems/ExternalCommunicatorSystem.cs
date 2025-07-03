@@ -12,18 +12,16 @@ using Unity.MLAgents.CommunicatorObjects; // For ObservationProto, AgentInfoProt
 namespace EcsTraining
 {
     //RequestDecision() in RemotePolicy
-    [UpdateAfter(typeof(ObservationCollectionSimpleSystem))]
+    [UpdateAfter(typeof(ObservationCollectionSystem))]
     public partial class ExternalCommunicatorSystem : SystemBase
     {
         private List<ISensor> _sensors;
         private VectorSensor _vectorObservation;
 
+        private bool _isInitialized;
+
         protected override void OnCreate()
         {
-            
-            CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{4}));
-            Debug.Log("BrainSubscribed");
-            
             // Subscribe all brains
             /*foreach (var (agent, policy, observations) in
                      Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
@@ -34,11 +32,13 @@ namespace EcsTraining
             
             //Change
             _sensors = new List<ISensor> { null };
-            _vectorObservation = new VectorSensor(6);
+            _vectorObservation = new VectorSensor(4);
         }
 
         protected override void OnUpdate()
         {
+            if(!_isInitialized)CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{4}));
+            _isInitialized = true;
             foreach (var (agent, policy, observations) in
                      Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy>())
@@ -53,6 +53,7 @@ namespace EcsTraining
                 
                 _vectorObservation.Reset();
                 _vectorObservation.AddObservation(observationArray);
+                Debug.Log(_vectorObservation.GetObservationSpec().Shape);
                 _sensors[0] = _vectorObservation;
                 
                 CommunicatorManager.PutObservation("a", agent.ValueRO, _sensors);

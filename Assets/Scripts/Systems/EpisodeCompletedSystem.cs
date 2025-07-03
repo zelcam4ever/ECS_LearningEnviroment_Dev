@@ -60,12 +60,14 @@ namespace EcsTraining
                 //TODO: CollectObservations
                 //TODO: change, currently simulating:
                 var sensors = new List<ISensor>();
-                var vectorSensor = new VectorSensor(6);
-                vectorSensor.AddObservation(transform.ValueRO.Position);
+                
+                var vectorSensor = new VectorSensor(4);
                 var targetPosition = GetComponent<LocalTransform>(agent.ValueRO.Target).Position;
-                vectorSensor.AddObservation(targetPosition);
+                float[] obs = {transform.ValueRO.Position.x, transform.ValueRO.Position.z, targetPosition.x, targetPosition.z};
+                vectorSensor.AddObservation(obs);
                 sensors.Add(vectorSensor);
                 CommunicatorManager.PutObservation("a", agent.ValueRO, sensors);
+                
                 //TODO: DemonstrationWriter
                 //TODO: Reset sensors*/
                     

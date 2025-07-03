@@ -6,7 +6,7 @@ using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining
 {
-    [UpdateAfter(typeof(ExternalPolicySystem))]
+    [UpdateAfter(typeof(ExternalCommunicatorSystem))]
     public partial struct DecideActionSystem : ISystem
     {
         public void OnCreate(ref SystemState state)
