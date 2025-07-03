@@ -30,13 +30,10 @@ namespace EcsTraining
                     //TargetPosition = GetEntity(authoring.SpawnPoint, TransformUsageFlags.Dynamic),
                 });
                 
-                // 1. Add the DynamicBuffer for the final float values
+                //Values buffer
                 DynamicBuffer<ObservationValue> observations = AddBuffer<ObservationValue>(entity);
-                // Resize the buffer to match the setup. It will be filled each frame.
                 observations.ResizeUninitialized(authoring.observationSetup.Length);
-
-                // 2. Add a separate buffer to store the *configuration*
-                // This tells our systems WHERE to get the data from.
+                //Config buffer
                 DynamicBuffer<ObservationSource> sources = AddBuffer<ObservationSource>(entity);
                 sources.Capacity = authoring.observationSetup.Length;
                 foreach (var sourceType in authoring.observationSetup)
