@@ -19,17 +19,19 @@ namespace EcsTraining
 
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, action, transform) in Query<RefRW<AgentEcs>, RefRO<AgentAction>, RefRW<LocalTransform>>())
+            foreach (var (agent, action, actionSpec, transform) in 
+                     Query<RefRW<AgentEcs>, RefRO<AgentAction>, RefRO<ActionsStructure>, RefRW<LocalTransform>>())
             {
                 if (!agent.ValueRO.RequestAction) continue; //&& and brain!=null
                 
                 agent.ValueRW.RequestAction = false;
                 //ActuatorManager.ExecuteActions();
-                var actionTaking = action.ValueRO.DiscreteActions[0];
-                Debug.Log("Im doing the following action: " + actionTaking);
+                var actionsTaking = action.ValueRO.DiscreteActions;
+                if(actionsTaking.Length == 0) continue;
+                Debug.Log("Im doing the following action: " + actionsTaking[0]);
                     
                 float3 movement;
-                switch (actionTaking)
+                switch (actionsTaking[0])
                 {
                     case 0:
                         movement = new float3(1,0, 0);

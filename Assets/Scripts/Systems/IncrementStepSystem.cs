@@ -29,12 +29,6 @@ namespace EcsTraining
                 agent.ValueRW.StepCount += 1;
             }
         }
-
-
-        /*[BurstCompile]
-        public partial struct IncrementAgentStepJob : IJobEntity
-        {
-            
-        }*/
+        
     }
 }

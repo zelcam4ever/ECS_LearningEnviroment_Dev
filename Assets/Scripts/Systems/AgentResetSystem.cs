@@ -23,7 +23,7 @@ namespace EcsTraining
         protected override void OnUpdate()
         {
             foreach (var (agent, policy, observations) in
-                     Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
+                     Query<RefRW<AgentEcs>, RefRO<BrainSimple>, DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy>())
             {
                 if(!agent.ValueRO.Done) continue;
@@ -43,7 +43,7 @@ namespace EcsTraining
                 _vectorObservation.AddObservation(observationArray);
                 _sensors[0] = _vectorObservation;
                 
-                CommunicatorManager.PutObservation("a", agent.ValueRO, _sensors);
+                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, _sensors);
                     
                 Debug.Log("Resetting agent: " + agent.ValueRO.EpisodeId);
                 

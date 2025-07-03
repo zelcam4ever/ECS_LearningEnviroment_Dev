@@ -19,8 +19,6 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            var academyStepCount = GetSingleton<AcademyTraining>().StepCount;
-            
             foreach (var agent in Query<RefRW<AgentEcs>>())
             {
                 if (true)

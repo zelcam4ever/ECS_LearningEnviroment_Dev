@@ -55,40 +55,38 @@ namespace EcsTraining
                 AddComponent(entity, new RemotePolicy());
 
                 // Brain baking
-                var brainComponent = new BrainSimple();
-                Assert.IsTrue(authoring.behaviourName.Length <= brainComponent.FullyQualifiedBehaviorName.Capacity,
-                    $"The size of continuous actions ({authoring.behaviourName}) exceeds the capacity " +
-                    $"of the FixedString ({brainComponent.FullyQualifiedBehaviorName}). " +
-                    $"Please increase the FixedString size in the BrainSimple struct.");
-                brainComponent.FullyQualifiedBehaviorName = authoring.behaviourName;
-                AddComponent(entity, brainComponent);
+                AddComponent(entity, new BrainSimple
+                {
+                    FullyQualifiedBehaviorName = authoring.behaviourName
+                });
                 
-                // Actions baking
+                // Actions runtime baking
                 var actionComponent = new AgentAction();
-                Assert.IsTrue(authoring.numContinuousActions <= actionComponent.ContinuousActions.Capacity,
-                    $"The number of continuous actions ({authoring.numContinuousActions}) exceeds the capacity " +
-                    $"of the FixedList ({actionComponent.ContinuousActions}). " +
-                    $"Please increase the FixedList size in the AgentAction struct.");
-
-                Assert.IsTrue(authoring.discreteBranchSizes.Length <= actionComponent.DiscreteActions.Capacity,
-                    $"The number of discrete branches ({authoring.discreteBranchSizes.Length}) exceeds the capacity " +
-                    $"of the FixedList ({actionComponent.DiscreteActions}). " +
-                    $"Please increase the FixedList size in the AgentAction struct.");
                 
                 for (int i = 0; i < authoring.numContinuousActions; i++)
                 {
                     actionComponent.ContinuousActions.Add(0f);
                 }
-
-                for (int i = 0; i < authoring.discreteBranchSizes.Length; i++)
+                
+                int numDiscreteBranches = authoring.discreteBranchSizes.Length;
+                for (int i = 0; i < numDiscreteBranches; i++)
                 {
-                    for (int j = 0; j < authoring.discreteBranchSizes[i]; j++)
-                    {
-                        actionComponent.DiscreteActions.Add(0);
-                    }
+                    actionComponent.DiscreteActions.Add(0);
                 }
-                Debug.Log("Lenght is: " + actionComponent.DiscreteActions.Length); ;
                 AddComponent(entity, actionComponent);
+        
+                // Actions Spec baking
+                var specComponent = new ActionsStructure
+                {
+                    NumContinuousActions = authoring.numContinuousActions
+                };
+                
+                foreach (var branchSize in authoring.discreteBranchSizes)
+                {
+                    specComponent.DiscreteBranchSizes.Add(branchSize);
+                }
+        
+                AddComponent(entity, specComponent);
             }
         }
     }

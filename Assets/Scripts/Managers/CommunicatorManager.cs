@@ -168,9 +168,10 @@ public static class CommunicatorManager
         Communicator.PutObservations(behaviorName, info, sensors);
     }
 
-    public static void SubscribeBrain(string name, ActionSpec actionSpec)
+    public static void SubscribeBrain(string name, ActionsStructure actionsStructure)
     {
-        Communicator.SubscribeBrain(name, actionSpec);
+        var agentSpec = new ActionSpec(actionsStructure.NumContinuousActions, actionsStructure.DiscreteBranchSizes.ToArray());
+        Communicator.SubscribeBrain(name, agentSpec);
     }
 
     public static ActionBuffers DecideAction(string brainName, int agentId)

@@ -18,8 +18,6 @@ namespace EcsTraining
         private List<ISensor> _sensors;
         private VectorSensor _vectorObservation;
 
-        private bool _isInitialized;
-
         protected override void OnCreate()
         {
             // Subscribe all brains
@@ -37,14 +35,19 @@ namespace EcsTraining
 
         protected override void OnUpdate()
         {
-            if(!_isInitialized)CommunicatorManager.SubscribeBrain("a", new ActionSpec(0, new int[]{4}));
-            _isInitialized = true;
             
-            foreach (var (agent, policy, observations) in
-                     Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
+            foreach (var (agent, policy, actionsSpec, observations) in
+                     Query<RefRW<AgentEcs>, RefRO<BrainSimple>, RefRO<ActionsStructure>,DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy>())
             {
                 if (!agent.ValueRO.RequestDecision) continue;
+
+                // Will try to subscribe the same brain multiple times, but we can assure all agents try at least once 
+                if (!agent.ValueRO.Initialized)
+                {
+                    CommunicatorManager.SubscribeBrain(policy.ValueRO.FullyQualifiedBehaviorName.Value, actionsSpec.ValueRO);
+                    agent.ValueRW.Initialized = true;
+                }
 
                 var observationArray = new float[observations.Length];
                 for (int i = 0; i < observations.Length; i++)
@@ -56,7 +59,7 @@ namespace EcsTraining
                 _vectorObservation.AddObservation(observationArray);
                 _sensors[0] = _vectorObservation;
                 
-                CommunicatorManager.PutObservation("a", agent.ValueRO, _sensors);
+                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, _sensors);
                 
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;
