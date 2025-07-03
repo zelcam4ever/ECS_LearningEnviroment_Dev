@@ -21,7 +21,7 @@ namespace EcsTraining
     public enum ObservationSourceType
     {
         PositionX, PositionY, PositionZ,
-        VelocityX, VelocityY, VelocityZ
+        PositionXTarget, PositionYTarget, PositionZTarget
     }
     
     public struct ObservationSource : IBufferElementData

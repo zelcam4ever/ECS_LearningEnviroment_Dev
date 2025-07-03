@@ -1,6 +1,7 @@
 using Unity.Entities;
 using Unity.MLAgents;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace EcsTraining
 {
@@ -9,7 +10,7 @@ namespace EcsTraining
         public int MaxStep;
         
         public ObservationSourceType[] observationSetup;
-        public Transform SpawnPoint;
+        public Transform Target;
         public Transform GroundRender;
         
         private class Baker : Baker<AgentAutoring>
@@ -22,7 +23,7 @@ namespace EcsTraining
                 {
                     MaxStep = authoring.MaxStep,
                     EpisodeId = EpisodeIdCounter.GetEpisodeId(),
-                    Target = GetEntity(authoring.SpawnPoint, TransformUsageFlags.Dynamic),
+                    Target = GetEntity(authoring.Target, TransformUsageFlags.Dynamic),
                     GoundRender = GetEntity(authoring.GroundRender, TransformUsageFlags.None),
                 });
                 AddComponent(entity, new Observation() 

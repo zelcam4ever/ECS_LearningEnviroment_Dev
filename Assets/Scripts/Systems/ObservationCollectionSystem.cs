@@ -17,7 +17,7 @@ namespace EcsTraining
     {
         private EntityQuery _AgentQuery;
         private ComponentLookup<LocalTransform> _TransformLookup;
-        private ComponentLookup<PhysicsVelocity> _VelocityLookup;
+        private ComponentLookup<AgentEcs> _AgentsLookup;
         
         private BufferTypeHandle<ObservationSource> _SourceBufferTypeHandle;
         private  BufferTypeHandle<ObservationValue> _ValueBufferTypeHandle;
@@ -30,13 +30,13 @@ namespace EcsTraining
         {
             // Define the query for entities that need observations gathered.
             _AgentQuery = new EntityQueryBuilder(Allocator.Temp)
-                .WithAll<ObservationSource, ObservationValue>()
+                .WithAll<ObservationSource, ObservationValue, AgentEcs>()
                 .Build(ref state);
             
             // We require these components to exist for the job, so we get their lookups.
             // The 'true' argument means we will only read from them.
             _TransformLookup = state.GetComponentLookup<LocalTransform>(true);
-            _VelocityLookup = state.GetComponentLookup<PhysicsVelocity>(true);
+            _AgentsLookup = state.GetComponentLookup<AgentEcs>(true);
             _entityTypeHandle = GetEntityTypeHandle();
 
             _SourceBufferTypeHandle = state.GetBufferTypeHandle<ObservationSource>(true); // ReadOnly
@@ -55,7 +55,7 @@ namespace EcsTraining
             // Important: ComponentLookups must be updated every frame.
             // This syncs them with the latest state of the world.
             _TransformLookup.Update(ref state);
-            _VelocityLookup.Update(ref state);
+            _AgentsLookup.Update(ref state);
             _entityTypeHandle.Update(ref state);
             _SourceBufferTypeHandle.Update(ref state);
             _ValueBufferTypeHandle.Update(ref state);
@@ -69,7 +69,7 @@ namespace EcsTraining
             
                 // Pass the updated lookups to the job.
                 TransformLookup = _TransformLookup,
-                VelocityLookup = _VelocityLookup,
+                AgentsLookup = _AgentsLookup,
             };
 
             // Schedule the job to run in parallel on all chunks matching our query.
@@ -86,7 +86,7 @@ namespace EcsTraining
             public BufferTypeHandle<ObservationValue> ValueBufferTypeHandle;
 
             [ReadOnly] public ComponentLookup<LocalTransform> TransformLookup;
-            [ReadOnly] public ComponentLookup<PhysicsVelocity> VelocityLookup;
+            [ReadOnly] public ComponentLookup<AgentEcs> AgentsLookup;
 
             public void Execute(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
             {
@@ -125,17 +125,17 @@ namespace EcsTraining
                                     observation = TransformLookup[entity].Position.z;
                                 break;
 
-                            case ObservationSourceType.VelocityX:
-                                if (VelocityLookup.HasComponent(entity))
-                                    observation = VelocityLookup[entity].Linear.x;
+                            case ObservationSourceType.PositionXTarget:
+                                if (AgentsLookup.HasComponent(entity))
+                                    observation = TransformLookup[AgentsLookup[entity].Target].Position.x;
                                 break;
-                            case ObservationSourceType.VelocityY:
-                                if (VelocityLookup.HasComponent(entity))
-                                    observation = VelocityLookup[entity].Linear.y;
+                            case ObservationSourceType.PositionYTarget:
+                                if (AgentsLookup.HasComponent(entity))
+                                    observation = TransformLookup[AgentsLookup[entity].Target].Position.y;
                                 break;
-                            case ObservationSourceType.VelocityZ:
-                                if (VelocityLookup.HasComponent(entity))
-                                    observation = VelocityLookup[entity].Linear.z;
+                            case ObservationSourceType.PositionZTarget:
+                                if (AgentsLookup.HasComponent(entity))
+                                    observation = TransformLookup[AgentsLookup[entity].Target].Position.z;
                                 break;
                         }
                         
