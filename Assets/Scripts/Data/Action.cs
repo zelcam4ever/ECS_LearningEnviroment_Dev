@@ -1,9 +1,11 @@
+using Unity.Collections;
 using Unity.Entities;
 
 namespace EcsTraining
 {
-    public struct Action : IComponentData
+    public struct AgentAction : IComponentData
     {
-        public int Value;
+        public FixedList64Bytes<float> ContinuousActions;
+        public FixedList64Bytes<int> DiscreteActions;
     }
 }

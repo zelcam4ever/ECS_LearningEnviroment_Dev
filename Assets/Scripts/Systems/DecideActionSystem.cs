@@ -7,47 +7,45 @@ using static Unity.Entities.SystemAPI;
 namespace EcsTraining
 {
     [UpdateAfter(typeof(ExternalCommunicatorSystem))]
-    public partial struct DecideActionSystem : ISystem
+    public partial class DecideActionSystem : SystemBase
     {
-        public void OnCreate(ref SystemState state)
+        protected override void OnUpdate()
         {
-            state.RequireForUpdate<Training>();
-            state.RequireForUpdate<BrainSimple>();
-        }
-
-        private int time;
-        
-        public void OnUpdate(ref SystemState state)
-        {
-            foreach (var (agent, brain, action) in Query<RefRO<AgentEcs>, RefRO<BrainSimple>,RefRW<Action>>())
+            foreach (var (agent, brain, actionComponent) in Query<RefRO<AgentEcs>, RefRO<BrainSimple>, RefRW<AgentAction>>())
             {
+                //if(someReason) continue;
+                
                 /*if (m_ActuatorManager.StoredActions.ContinuousActions.Array == null)
                 {
                     ResetData();
                 }*/
-                //var agentInfo = AgentInfoManager.GetAgentInfo(agent.ValueRO.AgentInfoId);
+                var actionBufferToCopy =
+                    CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,
+                        agent.ValueRO.EpisodeId);
 
-                var actionBufferToCopy = CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,agent.ValueRO.EpisodeId);
-                
                 /*if (actionBufferToCopy.IsEmpty())
                 {
                     Debug.Log($"Agent {agent.ValueRO.EpisodeId}: No action taken!");
                     continue;
                 }*/
                 //Debug.Log($"Agent {agent.ValueRO.EpisodeId}: action taken: {actionBufferToCopy.DiscreteActions[0]}");
-                
+
                 //Not necessary: Only important for logging
                 //agentInfo.CopyActions(actionBufferToCopy);
                 
-                //TODO Change / update?
-                if (actionBufferToCopy.DiscreteActions.Length > 0)
+                actionComponent.ValueRW.ContinuousActions.Clear();
+                actionComponent.ValueRW.DiscreteActions.Clear();
+                
+                foreach (var actionValue in actionBufferToCopy.ContinuousActions.Array)
                 {
-                    action.ValueRW.Value = actionBufferToCopy.DiscreteActions[0];
+                    actionComponent.ValueRW.ContinuousActions.Add(actionValue);
                 }
-                else action.ValueRW.Value = 0;
 
-
-
+                foreach (var actionValue in actionBufferToCopy.DiscreteActions.Array)
+                {
+                    actionComponent.ValueRW.DiscreteActions.Add(actionValue);
+                }
+                
                 //agentInfo.CopyActions(actionBufferToCopy);
                 //AgentInfoManager.SetAgentInfo(agent.ValueRO.AgentInfoId, agentInfo);
                 // m_ActuatorManager.UpdateActions(actions);

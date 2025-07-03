@@ -19,37 +19,39 @@ namespace EcsTraining
 
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, action, transform) in Query<RefRW<AgentEcs>, RefRO<Action>, RefRW<LocalTransform>>())
+            foreach (var (agent, action, transform) in Query<RefRW<AgentEcs>, RefRO<AgentAction>, RefRW<LocalTransform>>())
             {
-                if (agent.ValueRO.RequestAction) //&& and brain!=null
+                if (!agent.ValueRO.RequestAction) continue; //&& and brain!=null
+                
+                agent.ValueRW.RequestAction = false;
+                //ActuatorManager.ExecuteActions();
+                var actionTaking = action.ValueRO.DiscreteActions[0];
+                Debug.Log("Im doing the following action: " + actionTaking);
+                    
+                float3 movement;
+                switch (actionTaking)
                 {
-                    agent.ValueRW.RequestAction = false;
-                    //ActuatorManager.ExecuteActions();
-                    Debug.Log("Im doing the following action: " +action.ValueRO.Value);
-                    var movement = new float3();
-                    switch (action.ValueRO.Value)
-                    {
-                        case 0:
-                            movement = new float3(1,0, 0);
-                            break;
-                        case 1:
-                            movement = new float3(-1,0,0);
-                            break;
-                        case 2:
-                            movement = new float3(0, 0, 1);
-                            break;
-                        case 3:
-                            movement = new float3(0, 0, -1);
-                            break;
-                        default:
-                            Debug.LogWarning("Action out of range");
-                            break;
-                    }
-
-                    transform.ValueRW.Position += movement;
+                    case 0:
+                        movement = new float3(1,0, 0);
+                        break;
+                    case 1:
+                        movement = new float3(-1,0,0);
+                        break;
+                    case 2:
+                        movement = new float3(0, 0, 1);
+                        break;
+                    case 3:
+                        movement = new float3(0, 0, -1);
+                        break;
+                    default:
+                        movement = float3.zero;
+                        Debug.LogWarning("Action out of range");
+                        break;
                 }
 
-                
+                transform.ValueRW.Position += movement;
+
+
             }
         }
     }

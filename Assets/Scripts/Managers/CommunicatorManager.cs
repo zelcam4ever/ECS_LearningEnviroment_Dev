@@ -149,7 +149,6 @@ public static class CommunicatorManager
                 m_NumAreas = unityRlInitParameters.numAreas;
                 TrainerCapabilities = unityRlInitParameters.TrainerCapabilities;
                 TrainerCapabilities.WarnOnPythonMissingBaseRLCapabilities();
-                Debug.Log("We are connected holy shit");
             }
             else
             {
@@ -163,8 +162,7 @@ public static class CommunicatorManager
             Communicator = null;
         }
     }
-
-    //RemoteCommunicucator: Change
+    
     public static void PutObservation(string behaviorName, AgentEcs info, List<ISensor> sensors)
     {
         Communicator.PutObservations(behaviorName, info, sensors);
@@ -175,11 +173,10 @@ public static class CommunicatorManager
         Communicator.SubscribeBrain(name, actionSpec);
     }
 
-    public static ActionBuffers DecideAction(string brainname, int agentId)
+    public static ActionBuffers DecideAction(string brainName, int agentId)
     {
         Communicator.DecideBatch();
-        var actions = Communicator?.GetActions(brainname, agentId);
-        //TODO: return ref m_LastActionBuffer = actions == null ? ActionBuffers.Empty : (ActionBuffers)actions;
+        var actions = Communicator?.GetActions(brainName, agentId);
         return actions ?? ActionBuffers.Empty;
     }
 }

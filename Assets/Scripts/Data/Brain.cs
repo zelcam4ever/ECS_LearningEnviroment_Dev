@@ -17,11 +17,7 @@ namespace EcsTraining
     
     public struct BrainSimple: IComponentData
     {
-        public int AgentId;
         public FixedString32Bytes FullyQualifiedBehaviorName;
-        //public string FullyQualifiedBehaviorName;
-        //public ActionSpec ActionType;
-        //public ActionBuffers LastActionBuffer;
     }
 
     
