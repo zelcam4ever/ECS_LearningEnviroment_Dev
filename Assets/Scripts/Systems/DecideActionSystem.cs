@@ -23,11 +23,11 @@ namespace EcsTraining
                     CommunicatorManager.DecideAction(brain.ValueRO.FullyQualifiedBehaviorName.Value,
                         agent.ValueRO.EpisodeId);
 
-                /*if (actionBufferToCopy.IsEmpty())
+                if (actionBufferToCopy.Equals(ActionBuffers.Empty))
                 {
                     Debug.Log($"Agent {agent.ValueRO.EpisodeId}: No action taken!");
                     continue;
-                }*/
+                }
                 //Debug.Log($"Agent {agent.ValueRO.EpisodeId}: action taken: {actionBufferToCopy.DiscreteActions[0]}");
 
                 //Not necessary: Only important for logging

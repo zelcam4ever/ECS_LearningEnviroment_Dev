@@ -28,7 +28,6 @@ namespace EcsTraining
                 //ActuatorManager.ExecuteActions();
                 var actionsTaking = action.ValueRO.DiscreteActions;
                 if(actionsTaking.Length == 0) continue;
-                Debug.Log("Im doing the following action: " + actionsTaking[0]);
                     
                 float3 movement;
                 switch (actionsTaking[0])
