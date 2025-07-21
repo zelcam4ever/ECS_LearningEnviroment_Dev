@@ -1,8 +1,14 @@
 # ECS Learning Enviroment - Development Project
-This repo contains the development project where the ECS - AI Learning Enviroment (Future individual repo here) has been developed
+This repository contains the development environment for an experimental integration of Unity's ML-Agents with DOTS
 
+> [!WARNING]  
+> This is an active, unfinished project. Expect significant technical debt and architectural issues. This repository serves as a public prototyping space, so curious eyes are welcome!
 
-### `<Commits>`
+## How to Test
+This project uses the official Unity ML-Agents package. You must install `mlagents` via `pip`. It is highly recommended to do this in a virtual environment 
+
+Follow the official installation guide [ML Agents - Installation](https://github.com/Unity-Technologies/ml-agents/blob/release_22_docs/docs/Installation.md)
+## `<Commits>`
 * **build**: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
 * **ci**: Changes to our CI configuration files and scripts (example scopes: Circle, BrowserStack, SauceLabs)
 * **docs**: Documentation only changes
