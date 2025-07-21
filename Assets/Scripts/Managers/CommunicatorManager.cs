@@ -173,10 +173,20 @@ public static class CommunicatorManager
         var agentSpec = new ActionSpec(actionsStructure.NumContinuousActions, actionsStructure.DiscreteBranchSizes.ToArray());
         Communicator.SubscribeBrain(name, agentSpec);
     }
-
-    public static ActionBuffers DecideAction(string brainName, int agentId)
+    
+    public static void DecideAction()
     {
         Communicator.DecideBatch();
+    }
+    
+    public static Dictionary<int, ActionBuffers> GetActionsForBrain(string brainName)
+    {
+        var dicActions = Communicator?.GetActionsForBrain(brainName);
+        return dicActions ?? new Dictionary<int, ActionBuffers>();
+    }
+
+    public static ActionBuffers GetAction(string brainName, int agentId)
+    {
         var actions = Communicator?.GetActions(brainName, agentId);
         return actions ?? ActionBuffers.Empty;
     }

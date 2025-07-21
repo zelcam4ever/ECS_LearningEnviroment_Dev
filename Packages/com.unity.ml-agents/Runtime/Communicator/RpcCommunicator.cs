@@ -430,6 +430,7 @@ namespace Unity.MLAgents
         /// </summary>
         void SendBatchedMessageHelper()
         {
+            Debug.Log("Triggered Sending Batch at " + Time.time);
             var message = new UnityOutputProto
             {
                 RlOutput = m_CurrentUnityRlOutput,
@@ -488,6 +489,7 @@ namespace Unity.MLAgents
             {
                 m_OrderedAgentsRequestingDecisions[brainName].Clear();
             }
+            Debug.Log("Message received at " + Time.time);
         }
 
         public ActionBuffers GetActions(string behaviorName, int agentId)
@@ -500,6 +502,24 @@ namespace Unity.MLAgents
                 }
             }
             return ActionBuffers.Empty;
+        }
+        
+        /// <summary>
+        /// Retrieves the entire dictionary of actions for a given brain name.
+        /// This is more efficient than calling GetAction repeatedly in a loop.
+        /// </summary>
+        /// <param name="brainName">The fully qualified behavior name of the brain.</param>
+        /// <returns>A dictionary mapping agent IDs to their actions, or null if not found.</returns>
+        public Dictionary<int, ActionBuffers> GetActionsForBrain(string brainName)
+        {
+            // m_LastActionsReceived is your Dictionary<string, Dictionary<int, ActionBuffers>>
+            if (m_LastActionsReceived.TryGetValue(brainName, out var actionsForBrain))
+            {
+                return actionsForBrain;
+            }
+
+            // Return null or an empty dictionary if no actions for that brain were found.
+            return null;
         }
 
         /// <summary>

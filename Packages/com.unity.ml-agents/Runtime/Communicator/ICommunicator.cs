@@ -178,5 +178,7 @@ namespace Unity.MLAgents
         /// <param name="agentId">A key to identify which Agent actions to get.</param>
         /// <returns>`ActionBuffers` corresponding to the input key.</returns>
         ActionBuffers GetActions(string key, int agentId);
+
+        public Dictionary<int, ActionBuffers> GetActionsForBrain(string brainName);
     }
 }
