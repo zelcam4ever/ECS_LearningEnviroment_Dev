@@ -12,8 +12,10 @@ namespace EcsTraining
         public string behaviourName = "a";
         public int maxStep;
         
+        [Header("Observations")]
         public ObservationSourceType[] observationSetup;
         
+        [Header("Actions")]
         [Tooltip("The number of continuous actions the agent can take.")]
         [Min(0)]
         public int numContinuousActions = 0;
@@ -21,7 +23,29 @@ namespace EcsTraining
         [Tooltip("An array defining the size of each discrete action branch.")]
         public int[] discreteBranchSizes;
         
+
+        public bool decisionRequester;
+        // These fields will only appear if the bool decisionRequester true
+        
+        /// <summary>
+        /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
+        /// that the Agent will request a decision every 5 Academy steps. /// </summary>
+        public int decisionPeriod = 5;
+        
+        /// <summary>
+        /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
+        /// that the Agent will request a decision every 5 Academy steps. /// </summary>
+        public int decisionStep = 0;
+        
+        /// <summary>
+        /// Indicates whether the agent will take an action during the Academy steps where
+        /// it does not request a decision. Has no effect when DecisionPeriod is set to 1.
+        /// </summary>
+        public bool takeActionsBetweenDecisions = true;
+        
+        
         //Change from this component
+        [Header("Targets")]
         public Transform target;
         public Transform groundRender;
         
