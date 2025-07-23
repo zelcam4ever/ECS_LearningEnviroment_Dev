@@ -22,15 +22,15 @@ namespace EcsTraining
 
         [Tooltip("An array defining the size of each discrete action branch.")]
         public int[] discreteBranchSizes;
-        
 
-        public bool decisionRequester;
+
+        public bool decisionRequester = true;
         // These fields will only appear if the bool decisionRequester true
         
         /// <summary>
         /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
         /// that the Agent will request a decision every 5 Academy steps. /// </summary>
-        public int decisionPeriod = 5;
+        public int decisionPeriod = 2;
         
         /// <summary>
         /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
@@ -109,8 +109,18 @@ namespace EcsTraining
                 {
                     specComponent.DiscreteBranchSizes.Add(branchSize);
                 }
-        
                 AddComponent(entity, specComponent);
+                
+                // Decision baking
+                if (authoring.decisionRequester)
+                {
+                    AddComponent(entity, new DecisionRequest()
+                    {
+                        DecisionPeriod = authoring.decisionPeriod,
+                        DecisionStep = authoring.decisionStep,
+                        TakeActionsBetweenDecisions = authoring.takeActionsBetweenDecisions
+                    });
+                }
             }
         }
     }
