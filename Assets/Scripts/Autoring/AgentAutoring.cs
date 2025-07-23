@@ -33,8 +33,10 @@ namespace EcsTraining
         public int decisionPeriod = 2;
         
         /// <summary>
-        /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
-        /// that the Agent will request a decision every 5 Academy steps. /// </summary>
+        /// By changing this value, the timing of decision
+        /// can be shifted even among agents with the same decision period. The value can be
+        /// from 0 to DecisionPeriod - 1.
+        /// </summary>
         public int decisionStep = 0;
         
         /// <summary>

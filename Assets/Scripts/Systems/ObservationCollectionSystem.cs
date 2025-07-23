@@ -142,7 +142,7 @@ namespace EcsTraining
                     }
                 }
 
-                //entities.Dispose();
+                entities.Dispose();
             }
         }
     }
