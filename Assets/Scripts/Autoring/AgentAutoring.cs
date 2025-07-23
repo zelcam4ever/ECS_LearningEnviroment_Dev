@@ -12,16 +12,42 @@ namespace EcsTraining
         public string behaviourName = "a";
         public int maxStep;
         
+        [Header("Observations")]
         public ObservationSourceType[] observationSetup;
         
+        [Header("Actions")]
         [Tooltip("The number of continuous actions the agent can take.")]
         [Min(0)]
         public int numContinuousActions = 0;
 
         [Tooltip("An array defining the size of each discrete action branch.")]
         public int[] discreteBranchSizes;
+
+
+        public bool decisionRequester = true;
+        // These fields will only appear if the bool decisionRequester true
+        
+        /// <summary>
+        /// The frequency with which the agent requests a decision. A DecisionPeriod of 5 means
+        /// that the Agent will request a decision every 5 Academy steps. /// </summary>
+        public int decisionPeriod = 2;
+        
+        /// <summary>
+        /// By changing this value, the timing of decision
+        /// can be shifted even among agents with the same decision period. The value can be
+        /// from 0 to DecisionPeriod - 1.
+        /// </summary>
+        public int decisionStep = 0;
+        
+        /// <summary>
+        /// Indicates whether the agent will take an action during the Academy steps where
+        /// it does not request a decision. Has no effect when DecisionPeriod is set to 1.
+        /// </summary>
+        public bool takeActionsBetweenDecisions = true;
+        
         
         //Change from this component
+        [Header("Targets")]
         public Transform target;
         public Transform groundRender;
         
@@ -85,8 +111,18 @@ namespace EcsTraining
                 {
                     specComponent.DiscreteBranchSizes.Add(branchSize);
                 }
-        
                 AddComponent(entity, specComponent);
+                
+                // Decision baking
+                if (authoring.decisionRequester)
+                {
+                    AddComponent(entity, new DecisionRequest()
+                    {
+                        DecisionPeriod = authoring.decisionPeriod,
+                        DecisionStep = authoring.decisionStep,
+                        TakeActionsBetweenDecisions = authoring.takeActionsBetweenDecisions
+                    });
+                }
             }
         }
     }

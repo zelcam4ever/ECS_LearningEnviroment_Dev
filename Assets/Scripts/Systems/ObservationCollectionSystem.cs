@@ -79,7 +79,7 @@ namespace EcsTraining
         [BurstCompile]
         private struct GatherObservationsJob : IJobChunk
         {
-            // --- CHANGED: Added handle to get entities ---
+            // Added handle to get entities
             public EntityTypeHandle EntityTypeHandle; 
             
             [ReadOnly] public BufferTypeHandle<ObservationSource> SourceBufferTypeHandle;
@@ -90,8 +90,7 @@ namespace EcsTraining
 
             public void Execute(in ArchetypeChunk chunk, int unfilteredChunkIndex, bool useEnabledMask, in v128 chunkEnabledMask)
             {
-                // --- CHANGED: Get a NativeArray of all entities in the chunk first ---
-                // CORRECTED LINE: The 'ref' keyword is removed. The handle is passed by value.
+                // Get a NativeArray of all entities in the chunk first
                 NativeArray<Entity> entities = chunk.GetNativeArray(EntityTypeHandle);
 
                 BufferAccessor<ObservationSource> sourceAccessor = chunk.GetBufferAccessor(ref SourceBufferTypeHandle);
@@ -99,7 +98,7 @@ namespace EcsTraining
 
                 for (int i = 0; i < chunk.Count; i++)
                 {
-                    // --- CHANGED: Get the current entity from the array ---
+                    // Get the current entity from the array
                     var entity = entities[i];
                     
                     DynamicBuffer<ObservationSource> sources = sourceAccessor[i];
@@ -142,6 +141,8 @@ namespace EcsTraining
                         values[j] = observation;
                     }
                 }
+
+                entities.Dispose();
             }
         }
     }

@@ -19,15 +19,17 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var agent in Query<RefRW<AgentEcs>>())
+            var academyStepCount = GetSingleton<AcademyTraining>().StepCount;
+            foreach (var (agent, decisionRequest) in Query<RefRW<AgentEcs>, RefRO<DecisionRequest>>())
             {
-                if (true)
+                if (academyStepCount % decisionRequest.ValueRO.DecisionPeriod == decisionRequest.ValueRO.DecisionStep)
                 {
                     agent.ValueRW.RequestDecision = true;
                     agent.ValueRW.RequestAction = true;
+                    continue;
                 }
 
-                if (true)
+                if (decisionRequest.ValueRO.TakeActionsBetweenDecisions)
                 {
                     agent.ValueRW.RequestAction = true;
                 }
