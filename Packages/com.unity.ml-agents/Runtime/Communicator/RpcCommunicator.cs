@@ -430,7 +430,6 @@ namespace Unity.MLAgents
         /// </summary>
         void SendBatchedMessageHelper()
         {
-            Debug.Log("Triggered Sending Batch at " + Time.time);
             var message = new UnityOutputProto
             {
                 RlOutput = m_CurrentUnityRlOutput,
@@ -489,7 +488,6 @@ namespace Unity.MLAgents
             {
                 m_OrderedAgentsRequestingDecisions[brainName].Clear();
             }
-            Debug.Log("Message received at " + Time.time);
         }
 
         public ActionBuffers GetActions(string behaviorName, int agentId)
