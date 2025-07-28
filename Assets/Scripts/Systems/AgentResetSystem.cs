@@ -18,20 +18,7 @@ namespace EcsTraining
             {
                 if(!agent.ValueRO.Done) continue;
                 
-                if (agent.ValueRO.Reward > 50)
-                {
-                    Debug.Log($"Sending huge Reward in id:{agent.ValueRO.EpisodeId}");
-                }
-
-                var observationArray = new float[observations.Length];
-                for (int i = 0; i < observations.Length; i++)
-                {
-                    observationArray[i] = observations[i].Value;
-                }
-                
                 CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, observations);
-                    
-                Debug.Log("Resetting agent: " + agent.ValueRO.EpisodeId);
                 
                 agent.ValueRW.CompletedEpisodes += 1;
                 agent.ValueRW.Reward = 0f;
