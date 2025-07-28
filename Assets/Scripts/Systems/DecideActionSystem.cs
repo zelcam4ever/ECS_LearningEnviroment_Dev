@@ -16,18 +16,20 @@ namespace EcsTraining
         protected override void OnUpdate()
         {
             _uniqueBrainNames.Clear();
-            CommunicatorManager.DecideAction();
             
-            foreach (var brain in SystemAPI.Query<RefRO<BrainSimple>>())
+            foreach (var (brain, agent) in SystemAPI.Query<RefRO<BrainSimple>, RefRW<AgentEcs>>())
             {
+                if(!agent.ValueRO.RequestDecision) continue;
                 _uniqueBrainNames.Add(brain.ValueRO.FullyQualifiedBehaviorName.Value);
+                agent.ValueRW.RequestDecision = false;
             }
 
             if (_uniqueBrainNames.Count == 0) return;
             
+            CommunicatorManager.DecideAction();
+            
             foreach (string brainName in _uniqueBrainNames)
             {
-                
                 var actionsForThisBrain = CommunicatorManager.GetActionsForBrain(brainName);
                 if (actionsForThisBrain == null || actionsForThisBrain.Count == 0) continue;
                 
