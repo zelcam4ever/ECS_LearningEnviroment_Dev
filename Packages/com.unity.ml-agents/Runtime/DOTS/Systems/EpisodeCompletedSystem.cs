@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
+
 using Unity.Rendering;
 using Unity.Transforms;
 using UnityEngine;

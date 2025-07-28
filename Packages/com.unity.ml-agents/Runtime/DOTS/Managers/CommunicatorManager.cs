@@ -4,7 +4,6 @@ using Unity.Collections;
 using Unity.Entities;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Sensors;
 using UnityEngine;
 
 namespace Zelcam4.MLAgents.DOTS

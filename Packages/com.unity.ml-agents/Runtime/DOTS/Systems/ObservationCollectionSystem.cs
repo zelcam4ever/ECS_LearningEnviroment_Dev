@@ -4,7 +4,7 @@ using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
+
 using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;

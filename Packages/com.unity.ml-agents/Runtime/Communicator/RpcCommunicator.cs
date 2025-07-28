@@ -13,11 +13,11 @@ using System.Linq;
 using UnityEngine;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.CommunicatorObjects;
-using Unity.MLAgents.Sensors;
+
 using Unity.MLAgents.SideChannels;
 using Google.Protobuf;
 using Unity.Entities;
-using Unity.MLAgents.Analytics;
+
 
 namespace Unity.MLAgents
 {
@@ -32,8 +32,7 @@ namespace Unity.MLAgents
 
         List<string> m_BehaviorNames = new List<string>();
         bool m_NeedCommunicateThisStep;
-        ObservationWriter m_ObservationWriter = new ObservationWriter();
-        Dictionary<string, SensorShapeValidator> m_SensorShapeValidators = new Dictionary<string, SensorShapeValidator>();
+
         Dictionary<string, List<int>> m_OrderedAgentsRequestingDecisions = new Dictionary<string, List<int>>();
 
         /// The current UnityRLOutput to be sent when all the brains queried the communicator
@@ -155,7 +154,6 @@ namespace Unity.MLAgents
 
             var pythonPackageVersion = initializationInput.RlInitializationInput.PackageVersion;
             var pythonCommunicationVersion = initializationInput.RlInitializationInput.CommunicationVersion;
-            TrainingAnalytics.SetTrainerInformation(pythonPackageVersion, pythonCommunicationVersion);
 
             var communicationIsCompatible = CheckCommunicationVersionsAreCompatible(
                 initParameters.unityCommunicationVersion,
@@ -328,57 +326,7 @@ namespace Unity.MLAgents
             SendBatchedMessageHelper();
         }
 
-        /// <summary>
-        /// Sends the observations of one Agent.
-        /// </summary>
-        /// <param name="behaviorName">Batch Key.</param>
-        /// <param name="info">Agent info.</param>
-        /// <param name="sensors">Sensors that will produce the observations</param>
-        public void PutObservations(string behaviorName, AgentInfo info, List<ISensor> sensors)
-        {
-#if DEBUG
-            if (!m_SensorShapeValidators.ContainsKey(behaviorName))
-            {
-                m_SensorShapeValidators[behaviorName] = new SensorShapeValidator();
-            }
-            m_SensorShapeValidators[behaviorName].ValidateSensors(sensors);
-#endif
-
-            using (TimerStack.Instance.Scoped("AgentInfo.ToProto"))
-            {
-                var agentInfoProto = info.ToAgentInfoProto();
-
-                using (TimerStack.Instance.Scoped("GenerateSensorData"))
-                {
-                    foreach (var sensor in sensors)
-                    {
-                        var obsProto = sensor.GetObservationProto(m_ObservationWriter);
-                        agentInfoProto.Observations.Add(obsProto);
-                    }
-                }
-                m_CurrentUnityRlOutput.AgentInfos[behaviorName].Value.Add(agentInfoProto);
-            }
-
-            m_NeedCommunicateThisStep = true;
-            if (!m_OrderedAgentsRequestingDecisions.ContainsKey(behaviorName))
-            {
-                m_OrderedAgentsRequestingDecisions[behaviorName] = new List<int>();
-            }
-            if (!info.done)
-            {
-                m_OrderedAgentsRequestingDecisions[behaviorName].Add(info.episodeId);
-            }
-            if (!m_LastActionsReceived.ContainsKey(behaviorName))
-            {
-                m_LastActionsReceived[behaviorName] = new Dictionary<int, ActionBuffers>();
-            }
-            m_LastActionsReceived[behaviorName][info.episodeId] = ActionBuffers.Empty;
-            if (info.done)
-            {
-                m_LastActionsReceived[behaviorName].Remove(info.episodeId);
-            }
-        }
-        
+       
         public void PutObservations(string behaviorName, AgentEcs info, DynamicBuffer<ObservationValue> observations)
         {
             using (TimerStack.Instance.Scoped("AgentInfo.ToProto"))
