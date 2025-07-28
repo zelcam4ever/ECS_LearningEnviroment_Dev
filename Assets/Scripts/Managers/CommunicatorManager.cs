@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -164,9 +165,9 @@ public static class CommunicatorManager
         }
     }
     
-    public static void PutObservation(string behaviorName, AgentEcs info, List<ISensor> sensors)
+    public static void PutObservation(string behaviorName, AgentEcs info, DynamicBuffer<ObservationValue> observations)
     {
-        Communicator.PutObservations(behaviorName, info, sensors);
+        Communicator.PutObservations(behaviorName, info, observations);
     }
 
     public static void SubscribeBrain(string name, ActionsStructure actionsStructure)

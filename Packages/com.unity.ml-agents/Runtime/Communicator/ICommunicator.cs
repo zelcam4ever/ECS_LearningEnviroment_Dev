@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Entities;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
@@ -162,7 +163,7 @@ namespace Unity.MLAgents
         /// <param name="info">Agent info.</param>
         /// <param name="sensors">The list of ISensors of the Agent.</param>
         void PutObservations(string brainKey, AgentInfo info, List<ISensor> sensors);
-        void PutObservations(string brainKey, AgentEcs info, List<ISensor> sensors);
+        void PutObservations(string brainKey, AgentEcs info, DynamicBuffer<ObservationValue> observations);
 
         /// <summary>
         /// Signals the ICommunicator that the Agents are now ready to receive their action

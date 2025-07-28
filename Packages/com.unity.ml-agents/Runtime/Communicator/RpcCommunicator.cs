@@ -16,7 +16,7 @@ using Unity.MLAgents.CommunicatorObjects;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.SideChannels;
 using Google.Protobuf;
-
+using Unity.Entities;
 using Unity.MLAgents.Analytics;
 
 namespace Unity.MLAgents
@@ -379,27 +379,16 @@ namespace Unity.MLAgents
             }
         }
         
-        public void PutObservations(string behaviorName, AgentEcs info, List<ISensor> sensors)
+        public void PutObservations(string behaviorName, AgentEcs info, DynamicBuffer<ObservationValue> observations)
         {
-#if DEBUG
-            if (!m_SensorShapeValidators.ContainsKey(behaviorName))
-            {
-                m_SensorShapeValidators[behaviorName] = new SensorShapeValidator();
-            }
-            m_SensorShapeValidators[behaviorName].ValidateSensors(sensors);
-#endif
-
             using (TimerStack.Instance.Scoped("AgentInfo.ToProto"))
             {
                 var agentInfoProto = info.ToAgentInfoProto();
 
                 using (TimerStack.Instance.Scoped("GenerateSensorData"))
                 {
-                    foreach (var sensor in sensors)
-                    {
-                        var obsProto = sensor.GetObservationProto(m_ObservationWriter);
-                        agentInfoProto.Observations.Add(obsProto);
-                    }
+                    var obsProto = observations.GetObservationProto();
+                    agentInfoProto.Observations.Add(obsProto);
                 }
                 m_CurrentUnityRlOutput.AgentInfos[behaviorName].Value.Add(agentInfoProto);
             }
