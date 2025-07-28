@@ -22,35 +22,29 @@ namespace EcsTraining
     
         public void OnUpdate(ref SystemState state)
         {
-            
             foreach (var (agent,observation) in Query<RefRW<AgentEcs>, DynamicBuffer<ObservationValue>>())
             {
-                var isDone = false;
-                var maxSteps = false; //TODO: Changeplease
-                
                 if (math.distance(new float2(observation[0],observation[1]),new float2(observation[2],observation[3])) < 0.5f)
                 {
-                    Debug.Log("Episode completed [DONE] for agent: " + agent.ValueRO.EpisodeId);
-                    isDone = true;
-                    var material = GetComponent<MaterialMeshInfo>(agent.ValueRO.GoundRender);
-                    material.Material = -1;
-                    SetComponent(agent.ValueRO.GoundRender, material);
+                    agent.ValueRW.Done = true;
+                    
+                    UpdateMeshMaterial(ref state, agent.ValueRO, true);
                     
                 } else if (agent.ValueRO.StepCount >= agent.ValueRO.MaxStep && agent.ValueRO.MaxStep > 0)
                 {
-                    Debug.Log("Episode completed [STEP LIMIT] for agent: " + agent.ValueRO.EpisodeId);
-                    isDone = true;
-                    maxSteps = true;
+                    agent.ValueRW.Done = true;
+                    agent.ValueRW.MaxStepReached = true;
                     
-                    var material = GetComponent<MaterialMeshInfo>(agent.ValueRO.GoundRender);
-                    material.Material = -2;
-                    SetComponent(agent.ValueRO.GoundRender, material);
+                    UpdateMeshMaterial(ref state, agent.ValueRO, false);
                 }
-                
-
-                agent.ValueRW.Done = isDone;
-                agent.ValueRW.MaxStepReached = maxSteps;
             }
+        }
+
+        private void UpdateMeshMaterial(ref SystemState state, AgentEcs agent, bool succeeded)
+        {
+            var material = GetComponent<MaterialMeshInfo>(agent.GoundRender);
+            material.Material = succeeded? -1 : -2;
+            SetComponent(agent.GoundRender, material);
         }
     }
 }
