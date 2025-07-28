@@ -11,25 +11,24 @@ namespace EcsTraining
     [UpdateAfter(typeof(ExternalCommunicatorSystem))]
     public partial class DecideActionSystem : SystemBase
     {
-        private readonly HashSet<string> _uniqueBrainNames = new HashSet<string>();
         private AgentAction _jobDataCache = new AgentAction();
         protected override void OnUpdate()
         {
-            _uniqueBrainNames.Clear();
+            var uniqueBrainNames = new NativeHashSet<FixedString32Bytes>(16, Allocator.Temp);
             
             // We search for the N brains once, and then we iterate over each one. Doing so we avoid doing string lookups for each agent
             foreach (var (brain, agent) in SystemAPI.Query<RefRO<BrainSimple>, RefRW<AgentEcs>>())
             {
                 if(!agent.ValueRO.RequestDecision) continue;
-                _uniqueBrainNames.Add(brain.ValueRO.FullyQualifiedBehaviorName.Value);
+                uniqueBrainNames.Add(brain.ValueRO.FullyQualifiedBehaviorName.Value);
                 agent.ValueRW.RequestDecision = false;
             }
 
-            if (_uniqueBrainNames.Count == 0) return;
+            if (uniqueBrainNames.Count == 0) return;
             
             CommunicatorManager.DecideAction();
             
-            foreach (string brainName in _uniqueBrainNames)
+            foreach (var brainName in uniqueBrainNames)
             {
                 // Expensive lookup that is performed once per brain, instead of once per agent
                 var actionsForThisBrain = CommunicatorManager.GetActionsForBrain(brainName);
@@ -55,12 +54,14 @@ namespace EcsTraining
                     ActionsToDistribute = nativeActions
                 };
                 
-                var brainFilter = new BrainSimple { FullyQualifiedBehaviorName = new FixedString32Bytes(brainName) };
-                Dependency = job.ScheduleParallel(GetEntityQuery(typeof(AgentEcs), ComponentType.ReadWrite<AgentAction>(), ComponentType.ReadOnly(brainFilter.GetType())), Dependency);
+                var brainFilter = new BrainSimple { FullyQualifiedBehaviorName = brainName };
                 
-                // Need to call JobHandle.Complete() before we can deallocate the Unity.Collections.NativeHashMap
-                Dependency.Complete();
-                nativeActions.Dispose();
+                // Chain the disposal of the nativeActions to the job's dependency handle
+                Dependency = nativeActions.Dispose(job.ScheduleParallel(
+                    GetEntityQuery(typeof(AgentEcs),
+                        ComponentType.ReadWrite<AgentAction>(),
+                        ComponentType.ReadOnly(brainFilter.GetType())),
+                        Dependency));
             }
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
@@ -179,9 +180,9 @@ public static class CommunicatorManager
         Communicator.DecideBatch();
     }
     
-    public static Dictionary<int, ActionBuffers> GetActionsForBrain(string brainName)
+    public static Dictionary<int, ActionBuffers> GetActionsForBrain(FixedString32Bytes brainName)
     {
-        var dicActions = Communicator?.GetActionsForBrain(brainName);
+        var dicActions = Communicator?.GetActionsForBrain(brainName.ToString());
         return dicActions ?? new Dictionary<int, ActionBuffers>();
     }
 }
