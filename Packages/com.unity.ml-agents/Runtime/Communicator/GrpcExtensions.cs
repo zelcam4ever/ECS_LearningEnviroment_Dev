@@ -503,13 +503,13 @@ namespace Unity.MLAgents
         /// </summary>
         public static ObservationProto GetObservationProto(this DynamicBuffer<ObservationValue> observations)
         {
-            var name = "VectorSensor_DOTS";
+            const string name = "VectorSensor_DOTS";
 
             var floatDataProto = new ObservationProto.Types.FloatData
             {
                 Data =
                 {
-                    Capacity = observations.Length // Pre-allocate for performance
+                    Capacity = observations.Length
                 }
             };
 
@@ -521,13 +521,12 @@ namespace Unity.MLAgents
             var observationProto = new ObservationProto
             {
                 FloatData = floatDataProto,
-                Name = name, // Set the name from the new parameter
+                Name = name, 
                 ObservationType = ObservationTypeProto.Default,
                 CompressionType = CompressionTypeProto.None
             };
 
-            // For a flat vector of N floats, the shape is {1, N}.
-            observationProto.Shape.Add(1);
+            // Flat vector of N floats
             observationProto.Shape.Add(observations.Length);
 
             return observationProto;
