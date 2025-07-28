@@ -2,7 +2,6 @@ using Unity.Entities;
 using Unity.Mathematics;
 using Unity.MLAgents;
 using Unity.Transforms;
-using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace EcsTraining

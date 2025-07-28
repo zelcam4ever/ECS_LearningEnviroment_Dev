@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.MLAgents;
@@ -15,24 +16,6 @@ namespace EcsTraining
     [UpdateAfter(typeof(ObservationCollectionSystem))]
     public partial class ExternalCommunicatorSystem : SystemBase
     {
-        private List<ISensor> _sensors;
-        private VectorSensor _vectorObservation;
-
-        protected override void OnCreate()
-        {
-            // Subscribe all brains
-            /*foreach (var (agent, policy, observations) in
-                     Query<RefRW<AgentEcs>, RefRW<BrainSimple>, DynamicBuffer<ObservationValue>>()
-                         .WithAll<RemotePolicy>())
-            {
-
-            }*/
-            
-            //Change
-            _sensors = new List<ISensor> { null };
-            _vectorObservation = new VectorSensor(4);
-        }
-
         protected override void OnUpdate()
         {
             
@@ -48,21 +31,12 @@ namespace EcsTraining
                     CommunicatorManager.SubscribeBrain(policy.ValueRO.FullyQualifiedBehaviorName.Value, actionsSpec.ValueRO);
                     agent.ValueRW.Initialized = true;
                 }
-
-                var observationArray = new float[observations.Length];
-                for (int i = 0; i < observations.Length; i++)
-                {
-                    observationArray[i] = observations[i].Value;
-                }
                 
-                _vectorObservation.Reset();
-                _vectorObservation.AddObservation(observationArray);
-                _sensors[0] = _vectorObservation;
-                
-                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, _sensors);
+                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, observations);
                 
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;
+                
             }
         }
     }

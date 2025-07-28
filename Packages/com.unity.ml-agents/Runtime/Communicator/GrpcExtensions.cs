@@ -5,6 +5,7 @@ using Google.Protobuf;
 using Unity.MLAgents.CommunicatorObjects;
 using UnityEngine;
 using System.Runtime.CompilerServices;
+using Unity.Entities;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Demonstrations;
@@ -493,6 +494,41 @@ namespace Unity.MLAgents
             }
 
             observationProto.ObservationType = (ObservationTypeProto)obsSpec.ObservationType;
+            return observationProto;
+        }
+        
+        /// <summary>
+        /// Converts a DOTS DynamicBuffer of observation values directly into an
+        /// ML-Agents ObservationProto object.
+        /// </summary>
+        public static ObservationProto GetObservationProto(this DynamicBuffer<ObservationValue> observations)
+        {
+            const string name = "VectorSensor_DOTS";
+
+            var floatDataProto = new ObservationProto.Types.FloatData
+            {
+                Data =
+                {
+                    Capacity = observations.Length
+                }
+            };
+
+            foreach (var obsValue in observations)
+            {
+                floatDataProto.Data.Add(obsValue.Value);
+            }
+
+            var observationProto = new ObservationProto
+            {
+                FloatData = floatDataProto,
+                Name = name, 
+                ObservationType = ObservationTypeProto.Default,
+                CompressionType = CompressionTypeProto.None
+            };
+
+            // Flat vector of N floats
+            observationProto.Shape.Add(observations.Length);
+
             return observationProto;
         }
 

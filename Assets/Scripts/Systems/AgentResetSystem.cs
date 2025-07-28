@@ -10,16 +10,6 @@ namespace EcsTraining
     [UpdateAfter(typeof(EpisodeCompletedSystem))]
     public partial class AgentResetSystem : SystemBase
     {
-        private List<ISensor> _sensors;
-        private VectorSensor _vectorObservation;
-
-        protected override void OnCreate()
-        {
-            //Change
-            _sensors = new List<ISensor> { null };
-            _vectorObservation = new VectorSensor(4);
-        }
-
         protected override void OnUpdate()
         {
             foreach (var (agent, policy, observations) in
@@ -39,11 +29,7 @@ namespace EcsTraining
                     observationArray[i] = observations[i].Value;
                 }
                 
-                _vectorObservation.Reset();
-                _vectorObservation.AddObservation(observationArray);
-                _sensors[0] = _vectorObservation;
-                
-                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, _sensors);
+                CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, observations);
                     
                 Debug.Log("Resetting agent: " + agent.ValueRO.EpisodeId);
                 

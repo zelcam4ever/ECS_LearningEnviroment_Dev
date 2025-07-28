@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Unity.Entities;
 using UnityEngine;
 
 namespace Unity.MLAgents.Sensors
@@ -214,5 +215,14 @@ namespace Unity.MLAgents.Sensors
                 AddFloatObs(i == observation ? 1.0f : 0.0f);
             }
         }
+    }
+    
+    public struct ObservationValue : IBufferElementData
+    {
+        public float Value;
+        
+        // Convenience
+        public static implicit operator float(ObservationValue e) { return e.Value; }
+        public static implicit operator ObservationValue(float f) { return new ObservationValue { Value = f }; }
     }
 }
