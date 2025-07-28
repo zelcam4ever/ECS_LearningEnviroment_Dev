@@ -4,7 +4,7 @@ using static Unity.Entities.SystemAPI;
 using Unity.MLAgents;
 using UnityEngine;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateBefore(typeof(RequesterSystem))]
     public partial struct InitializeEnvironmentSystem : ISystem

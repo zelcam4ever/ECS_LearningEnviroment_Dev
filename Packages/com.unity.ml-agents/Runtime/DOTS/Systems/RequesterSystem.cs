@@ -3,7 +3,7 @@ using Unity.MLAgents;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     /// <summary>
     /// Equivalent to DecisionRequester. Iterates over all Agents and check whether they request Decision or Actions

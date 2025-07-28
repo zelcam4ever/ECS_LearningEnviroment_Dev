@@ -6,7 +6,7 @@ using UnityEngine;
 using static Unity.Entities.SystemAPI;
 using Random = UnityEngine.Random;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(DecideActionSystem))]
     public partial struct AgentActionSystem : ISystem

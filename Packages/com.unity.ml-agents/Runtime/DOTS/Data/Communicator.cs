@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     public struct CommunicatorInformation : IComponentData
     {

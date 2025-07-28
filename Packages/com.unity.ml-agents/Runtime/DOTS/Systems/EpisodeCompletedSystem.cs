@@ -9,7 +9,7 @@ using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(RewardSystem))]
     public partial struct EpisodeCompletedSystem : ISystem

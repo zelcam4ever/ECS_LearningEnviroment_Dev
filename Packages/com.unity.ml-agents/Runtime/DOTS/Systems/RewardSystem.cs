@@ -4,7 +4,7 @@ using Unity.MLAgents;
 using Unity.Transforms;
 using static Unity.Entities.SystemAPI;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(AgentActionSystem))]
     public partial struct RewardSystem : ISystem

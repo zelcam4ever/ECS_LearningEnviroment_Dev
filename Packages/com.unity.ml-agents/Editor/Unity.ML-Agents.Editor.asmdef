@@ -5,7 +5,7 @@
         "Unity.ML-Agents",
         "Unity.ML-Agents.CommunicatorObjects",
         "Unity.Sentis",
-        "ML-Agents.DOTS"
+        "Zelcam4.ML-Agents.DOTS"
     ],
     "includePlatforms": [
         "Editor"

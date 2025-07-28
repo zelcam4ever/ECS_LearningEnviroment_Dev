@@ -4,7 +4,7 @@ using Unity.Entities;
 
 using Unity.MLAgents.Actuators;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     public struct BrainSimple: IComponentData
     {

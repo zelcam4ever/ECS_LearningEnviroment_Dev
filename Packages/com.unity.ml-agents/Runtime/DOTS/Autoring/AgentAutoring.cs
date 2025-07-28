@@ -6,7 +6,7 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     public class AgentAutoring: MonoBehaviour
     {

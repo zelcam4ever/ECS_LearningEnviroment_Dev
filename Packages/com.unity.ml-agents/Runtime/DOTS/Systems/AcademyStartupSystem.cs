@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateInGroup(typeof(InitializationSystemGroup))]
     public partial struct AcademyStartupSystem : ISystem

@@ -9,7 +9,7 @@ using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(IncrementStepSystem))]
     public partial struct ObservationCollectionSystem : ISystem

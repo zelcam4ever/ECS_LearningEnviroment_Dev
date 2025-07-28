@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     public struct DecisionRequest : IComponentData
     {

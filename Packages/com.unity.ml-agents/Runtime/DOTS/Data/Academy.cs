@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Unity.Entities;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     /// <summary>
     /// Stores the global data, episodes, steps and areas.

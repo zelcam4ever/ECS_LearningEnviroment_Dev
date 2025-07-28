@@ -1,7 +1,7 @@
 using Unity.Collections;
 using Unity.Entities;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     /// <summary>
     /// A component that stores the action decided by the policy.

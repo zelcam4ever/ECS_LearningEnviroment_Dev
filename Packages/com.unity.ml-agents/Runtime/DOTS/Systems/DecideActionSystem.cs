@@ -6,7 +6,7 @@ using Unity.MLAgents;
 using UnityEngine;
 
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(ExternalCommunicatorSystem))]
     public partial class DecideActionSystem : SystemBase

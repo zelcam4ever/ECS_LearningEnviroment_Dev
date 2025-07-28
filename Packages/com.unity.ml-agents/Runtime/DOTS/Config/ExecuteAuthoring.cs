@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     class ExecuteAuthoring : MonoBehaviour
     {

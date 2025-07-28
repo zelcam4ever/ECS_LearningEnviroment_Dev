@@ -4,7 +4,7 @@ using Unity.MLAgents;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     /// <summary>
     /// Handles the episode steps, substituting the Academy event.

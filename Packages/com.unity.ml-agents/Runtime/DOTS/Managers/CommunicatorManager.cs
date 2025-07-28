@@ -7,7 +7,7 @@ using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using UnityEngine;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 { 
 public static class CommunicatorManager 
 {

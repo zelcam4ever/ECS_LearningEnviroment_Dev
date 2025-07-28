@@ -1,4 +1,4 @@
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     internal static class EpisodeIdCounter
     {

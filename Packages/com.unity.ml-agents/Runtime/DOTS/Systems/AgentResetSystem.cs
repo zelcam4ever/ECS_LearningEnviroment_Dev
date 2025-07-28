@@ -5,7 +5,7 @@ using Unity.MLAgents.Sensors;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
-namespace MLAgents.DOTS
+namespace Zelcam4.MLAgents.DOTS
 {
     [UpdateAfter(typeof(EpisodeCompletedSystem))]
     public partial class AgentResetSystem : SystemBase
