@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Unity.Entities;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Sensors;
 using UnityEngine;
 using UnityEngine.Serialization;
 
