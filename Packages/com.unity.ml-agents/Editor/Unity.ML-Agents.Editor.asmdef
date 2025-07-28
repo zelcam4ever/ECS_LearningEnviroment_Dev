@@ -4,7 +4,8 @@
     "references": [
         "Unity.ML-Agents",
         "Unity.ML-Agents.CommunicatorObjects",
-        "Unity.Sentis"
+        "Unity.Sentis",
+        "ML-Agents.DOTS"
     ],
     "includePlatforms": [
         "Editor"
