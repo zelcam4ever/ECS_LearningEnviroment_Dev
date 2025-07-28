@@ -1,3 +1,4 @@
+using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.MLAgents;
@@ -16,43 +17,36 @@ namespace Zelcam4.MLAgents.DOTS
             state.RequireForUpdate<Training>(); 
         }
 
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, action, actionSpec, transform) in 
-                     Query<RefRW<AgentEcs>, RefRO<AgentAction>, RefRO<ActionsStructure>, RefRW<LocalTransform>>())
+            var actionJob = new AgentActionJob();
+            state.Dependency = actionJob.ScheduleParallel(state.Dependency);
+        }
+    }
+    
+    [BurstCompile]
+    public partial struct AgentActionJob : IJobEntity
+    {
+        private void Execute(ref AgentEcs agent, in AgentAction action, ref LocalTransform transform)
+        {
+            if (!agent.RequestAction) return;
+
+            agent.RequestAction = false;
+            var actionsTaking = action.DiscreteActions;
+            
+            
+            float3 movement;
+            switch (actionsTaking[0])
             {
-                if (!agent.ValueRO.RequestAction) continue; //&& and brain!=null
-                
-                agent.ValueRW.RequestAction = false;
-                //ActuatorManager.ExecuteActions();
-                var actionsTaking = action.ValueRO.DiscreteActions;
-                if(actionsTaking.Length == 0) continue;
-                    
-                float3 movement;
-                switch (actionsTaking[0])
-                {
-                    case 0:
-                        movement = new float3(1,0, 0);
-                        break;
-                    case 1:
-                        movement = new float3(-1,0,0);
-                        break;
-                    case 2:
-                        movement = new float3(0, 0, 1);
-                        break;
-                    case 3:
-                        movement = new float3(0, 0, -1);
-                        break;
-                    default:
-                        movement = float3.zero;
-                        Debug.LogWarning("Action out of range");
-                        break;
-                }
-
-                transform.ValueRW.Position += movement;
-
-
+                case 0: movement = new float3(1, 0, 0); break;
+                case 1: movement = new float3(-1, 0, 0); break;
+                case 2: movement = new float3(0, 0, 1); break;
+                case 3: movement = new float3(0, 0, -1); break;
+                default: movement = float3.zero; break;
             }
+            transform.Position += movement;
+
         }
     }
 }
