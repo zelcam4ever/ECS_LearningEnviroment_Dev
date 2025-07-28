@@ -63,7 +63,6 @@ namespace EcsTraining
                 
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;
-                agent.ValueRW.RequestDecision = false;
             }
         }
     }

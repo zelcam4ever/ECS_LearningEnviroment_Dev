@@ -184,12 +184,6 @@ public static class CommunicatorManager
         var dicActions = Communicator?.GetActionsForBrain(brainName);
         return dicActions ?? new Dictionary<int, ActionBuffers>();
     }
-
-    public static ActionBuffers GetAction(string brainName, int agentId)
-    {
-        var actions = Communicator?.GetActions(brainName, agentId);
-        return actions ?? ActionBuffers.Empty;
-    }
 }
 }
 
