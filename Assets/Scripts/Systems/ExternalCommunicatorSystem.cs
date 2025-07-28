@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.MLAgents;
@@ -15,6 +16,8 @@ namespace EcsTraining
     [UpdateAfter(typeof(ObservationCollectionSystem))]
     public partial class ExternalCommunicatorSystem : SystemBase
     {
+        private float[] _reusableObservationArray = Array.Empty<float>();
+        
         private List<ISensor> _sensors;
         private VectorSensor _vectorObservation;
 
@@ -49,20 +52,25 @@ namespace EcsTraining
                     agent.ValueRW.Initialized = true;
                 }
 
-                var observationArray = new float[observations.Length];
+                if (_reusableObservationArray.Length < observations.Length)
+                {
+                    _reusableObservationArray = new float[observations.Length];
+                }
+                
                 for (int i = 0; i < observations.Length; i++)
                 {
-                    observationArray[i] = observations[i].Value;
+                    _reusableObservationArray[i] = observations[i].Value;
                 }
                 
                 _vectorObservation.Reset();
-                _vectorObservation.AddObservation(observationArray);
+                _vectorObservation.AddObservation(_reusableObservationArray);
                 _sensors[0] = _vectorObservation;
-                
+
                 CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, _sensors);
                 
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;
+                
             }
         }
     }
