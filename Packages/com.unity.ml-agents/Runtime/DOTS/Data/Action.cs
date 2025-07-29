@@ -15,16 +15,4 @@ namespace Zelcam4.MLAgents.DOTS
         // Its length will be equal to the number of branches.
         public FixedList64Bytes<int> DiscreteActions; 
     }
-
-    /// <summary>
-    /// A component that stores the specs of the action space.
-    /// This data is baked once and is used to interpret the AgentAction output.
-    /// </summary>
-    public struct ActionsStructure : IComponentData
-    {
-        public int NumContinuousActions;
-
-        // This stores the size of each discrete branch, e.g., {2, 3, 4}.
-        public FixedList64Bytes<int> DiscreteBranchSizes;
-    }
 }

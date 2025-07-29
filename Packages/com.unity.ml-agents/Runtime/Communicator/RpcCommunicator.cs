@@ -44,7 +44,7 @@ namespace Unity.MLAgents
 
         // Brains that we have sent over the communicator with agents.
         HashSet<string> m_SentBrainKeys = new HashSet<string>();
-        Dictionary<string, ActionSpec> m_UnsentBrainKeys = new Dictionary<string, ActionSpec>();
+        Dictionary<string, ActionsStructure> m_UnsentBrainKeys = new Dictionary<string, ActionsStructure>();
 
 
         /// The Unity to External client.
@@ -203,7 +203,7 @@ namespace Unity.MLAgents
         /// </summary>
         /// <param name="brainKey">Brain key.</param>
         /// <param name="actionSpec"> Description of the actions for the Agent.</param>
-        public void SubscribeBrain(string brainKey, ActionSpec actionSpec)
+        public void SubscribeBrain(string brainKey, ActionsStructure actionSpec)
         {
             if (m_BehaviorNames.Contains(brainKey))
             {
@@ -526,7 +526,7 @@ namespace Unity.MLAgents
             };
         }
 
-        void CacheActionSpec(string behaviorName, ActionSpec actionSpec)
+        void CacheActionSpec(string behaviorName, ActionsStructure actionsStructure)
         {
             if (m_SentBrainKeys.Contains(behaviorName))
             {
@@ -534,7 +534,7 @@ namespace Unity.MLAgents
             }
 
             // TODO We should check that if m_unsentBrainKeys has brainKey, it equals actionSpec
-            m_UnsentBrainKeys[behaviorName] = actionSpec;
+            m_UnsentBrainKeys[behaviorName] = actionsStructure;
         }
 
         UnityRLInitializationOutputProto GetTempUnityRlInitializationOutput()

@@ -153,8 +153,8 @@ namespace Unity.MLAgents
         /// Registers a new Brain to the Communicator.
         /// </summary>
         /// <param name="name">The name or key uniquely identifying the Brain.</param>
-        /// <param name="actionSpec"> Description of the actions for the Agent.</param>
-        void SubscribeBrain(string name, ActionSpec actionSpec);
+        /// <param name="actionStructure"> Description of the actions for the Agent.</param>
+        void SubscribeBrain(string name, ActionsStructure actionStructure);
 
         /// <summary>
         /// Sends the observations of one Agent.

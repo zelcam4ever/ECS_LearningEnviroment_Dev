@@ -16,7 +16,7 @@ namespace Zelcam4.MLAgents.DOTS
         protected override void OnUpdate()
         {
             
-            foreach (var (agent, policy, actionsSpec, observations) in
+            foreach (var (agent, policy, actionsStructure, observations) in
                      Query<RefRW<AgentEcs>, RefRO<BrainSimple>, RefRO<ActionsStructure>,DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy>())
             {
@@ -25,7 +25,7 @@ namespace Zelcam4.MLAgents.DOTS
                 // Will try to subscribe the same brain multiple times, but we can assure all agents try at least once 
                 if (!agent.ValueRO.Initialized)
                 {
-                    CommunicatorManager.SubscribeBrain(policy.ValueRO.FullyQualifiedBehaviorName.Value, actionsSpec.ValueRO);
+                    CommunicatorManager.SubscribeBrain(policy.ValueRO.FullyQualifiedBehaviorName.Value, actionsStructure.ValueRO);
                     agent.ValueRW.Initialized = true;
                 }
                 

@@ -138,8 +138,7 @@ public static class CommunicatorManager
 
     public static void SubscribeBrain(string name, ActionsStructure actionsStructure)
     {
-        var agentSpec = new ActionSpec(actionsStructure.NumContinuousActions, actionsStructure.DiscreteBranchSizes.ToArray());
-        Communicator.SubscribeBrain(name, agentSpec);
+        Communicator.SubscribeBrain(name, actionsStructure);
     }
     
     public static void DecideAction()

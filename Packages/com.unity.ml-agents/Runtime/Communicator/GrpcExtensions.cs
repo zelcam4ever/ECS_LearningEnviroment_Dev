@@ -38,16 +38,16 @@ namespace Unity.MLAgents
         /// Converts an ActionSpec into to a Protobuf BrainInfoProto so it can be sent.
         /// </summary>
         /// <returns>The BrainInfoProto generated.</returns>
-        /// <param name="actionSpec"> Description of the actions for the Agent.</param>
+        /// <param name="actionStructure"> Description of the actions for the Agent.</param>
         /// <param name="name">The name of the brain.</param>
         /// <param name="isTraining">Whether or not the Brain is training.</param>
-        public static BrainParametersProto ToBrainParametersProto(this ActionSpec actionSpec, string name, bool isTraining)
+        public static BrainParametersProto ToBrainParametersProto(this ActionsStructure actionStructure, string name, bool isTraining)
         {
             var brainParametersProto = new BrainParametersProto
             {
                 BrainName = name,
                 IsTraining = isTraining,
-                ActionSpec = ToActionSpecProto(actionSpec),
+                ActionSpec = ToActionSpecProto(actionStructure),
             };
 
             /*var supportHybrid = Academy.Instance.TrainerCapabilities == null || Academy.Instance.TrainerCapabilities.HybridActions;
@@ -87,6 +87,17 @@ namespace Unity.MLAgents
             {
                 actionSpecProto.DiscreteBranchSizes.AddRange(actionSpec.BranchSizes);
             }
+            return actionSpecProto;
+        }
+
+        public static ActionSpecProto ToActionSpecProto(this ActionsStructure actionStructure)
+        {
+            var actionSpecProto = new ActionSpecProto
+            {
+                NumContinuousActions = actionStructure.NumContinuousActions,
+                NumDiscreteActions = actionStructure.NumDiscreteActions,
+            };
+            actionSpecProto.DiscreteBranchSizes.AddRange(actionStructure.DiscreteBranchSizes);
             return actionSpecProto;
         }
 

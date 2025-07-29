@@ -1,7 +1,23 @@
+using Unity.Collections;
+using Unity.Entities;
 using UnityEngine.Profiling;
 
 namespace Unity.MLAgents.Actuators
 {
+    /// <summary>
+    /// A component that stores the specs of the action space.
+    /// This data is baked once and is used to interpret the AgentAction output.
+    /// </summary>
+    public struct ActionsStructure : IComponentData
+    {
+        public int NumContinuousActions;
+
+        // This stores the size of each discrete branch, e.g., {2, 3, 4}.
+        public FixedList64Bytes<int> DiscreteBranchSizes;
+        
+        public int NumDiscreteActions => DiscreteBranchSizes.Length;
+    }
+    
     /// <summary>
     /// IActuator implementation that forwards calls to an <see cref="IActionReceiver"/> and an <see cref="IHeuristicProvider"/>.
     /// </summary>
