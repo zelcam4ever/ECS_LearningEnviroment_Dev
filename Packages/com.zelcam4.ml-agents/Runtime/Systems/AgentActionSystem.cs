@@ -38,6 +38,7 @@ namespace Zelcam4.MLAgents
             
             
             float3 movement;
+            if (actionsTaking.Length <= 0) return;
             switch (actionsTaking[0])
             {
                 case 0: movement = new float3(1, 0, 0); break;

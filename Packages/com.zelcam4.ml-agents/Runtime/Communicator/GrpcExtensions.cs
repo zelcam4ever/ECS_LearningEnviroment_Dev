@@ -110,41 +110,30 @@ namespace Zelcam4.MLAgents
         }
 
         #region AgentAction
-
-        public static List<AgentAction> ToAgentActionList(this UnityRLInputProto.Types.ListAgentActionProto proto)
+        
+        public static void ToAgentAction(this AgentActionProto proto, ref AgentAction agentActionToFill)
         {
-            var agentActions = new List<AgentAction>(proto.Value.Count);
-            foreach (var ap in proto.Value)
+            agentActionToFill.ContinuousActions.Clear();
+            agentActionToFill.DiscreteActions.Clear();
+    
+            // Convert Continuous Actions without creating an array
+            if (proto.ContinuousActions.Count <= agentActionToFill.ContinuousActions.Capacity)
             {
-                agentActions.Add(ap.ToAgentAction());
-            }
-            return agentActions;
-        }
-        public static AgentAction ToAgentAction(this AgentActionProto proto)
-        {
-            var agentAction = new AgentAction();
-            
-            var continuousActionsArray = proto.ContinuousActions.ToArray();
-            
-            if (continuousActionsArray.Length <= agentAction.ContinuousActions.Capacity)
-            {
-                foreach (var action in continuousActionsArray)
+                // Loop directly over the proto's collection
+                foreach (var action in proto.ContinuousActions)
                 {
-                    agentAction.ContinuousActions.Add(action);
+                    agentActionToFill.ContinuousActions.Add(action);
                 }
             }
-            
-            var discreteActionsArray = proto.DiscreteActions.ToArray();
-            
-            if (discreteActionsArray.Length <= agentAction.DiscreteActions.Capacity)
+    
+            // Convert Discrete Actions without creating an array
+            if (proto.DiscreteActions.Count <= agentActionToFill.DiscreteActions.Capacity)
             {
-                foreach (var action in discreteActionsArray)
+                foreach (var action in proto.DiscreteActions)
                 {
-                    agentAction.DiscreteActions.Add(action);
+                    agentActionToFill.DiscreteActions.Add(action);
                 }
             }
-
-            return agentAction;
         }
         #endregion
 

@@ -399,24 +399,26 @@ namespace Zelcam4.MLAgents.CommunicatorObjects
 
             foreach (var brainName in rlInput.AgentActions.Keys)
             {
-                if (!m_OrderedAgentsRequestingDecisions[brainName].Any())
+                // Get the raw list of protos and the corresponding agent IDs
+                var protoActionList = rlInput.AgentActions[brainName].Value;
+                var agentIdList = m_OrderedAgentsRequestingDecisions[brainName];
+    
+                // The response from Python should have actions for each agent that requested a decision.
+                if (protoActionList.Count != agentIdList.Count)
                 {
+                    Debug.LogError($"Mismatch in number of actions received. Expected {agentIdList.Count} but got {protoActionList.Count}"); 
                     continue;
                 }
-
-                if (!rlInput.AgentActions[brainName].Value.Any())
+                
+                for (var i = 0; i < protoActionList.Count; i++)
                 {
-                    continue;
-                }
+                    var agentActionProto = protoActionList[i];
+                    var agentId = agentIdList[i];
 
-                var agentActions = rlInput.AgentActions[brainName].ToAgentActionList();
-                var numAgents = m_OrderedAgentsRequestingDecisions[brainName].Count;
-                for (var i = 0; i < numAgents; i++)
-                {
-                    var agentAction = agentActions[i];
-                    var agentId = m_OrderedAgentsRequestingDecisions[brainName][i];
                     if (m_LastActionsReceived[brainName].ContainsKey(agentId))
                     {
+                        var agentAction = new AgentAction();
+                        agentActionProto.ToAgentAction(ref agentAction);
                         m_LastActionsReceived[brainName][agentId] = agentAction;
                     }
                 }
