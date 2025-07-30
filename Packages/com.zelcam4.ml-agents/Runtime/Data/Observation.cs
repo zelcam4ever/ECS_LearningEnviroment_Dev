@@ -12,17 +12,6 @@ namespace Zelcam4.MLAgents
         public static implicit operator ObservationValue(float f) { return new ObservationValue { Value = f }; }
     }
     
-    public enum ObservationSourceType
-    {
-        PositionX, PositionY, PositionZ,
-        PositionXTarget, PositionYTarget, PositionZTarget
-    }
-    
-    public struct ObservationSource : IBufferElementData
-    {
-        public ObservationSourceType SourceType;
-    }
-    
     /// <summary>
     /// A generic request to observe a value from a component of type T.
     /// </summary>
