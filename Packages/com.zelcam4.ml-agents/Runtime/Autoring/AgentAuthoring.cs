@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Zelcam4.MLAgents
 {
-    public class AgentAutoring: MonoBehaviour
+    public class AgentAuthoring: MonoBehaviour
     {
         public string behaviourName = "a";
         public int maxStep;
@@ -48,9 +48,9 @@ namespace Zelcam4.MLAgents
         public Transform target;
         public Transform groundRender;
         
-        private class Baker : Baker<AgentAutoring>
+        private class Baker : Baker<AgentAuthoring>
         {
-            public override void Bake(AgentAutoring authoring)
+            public override void Bake(AgentAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 

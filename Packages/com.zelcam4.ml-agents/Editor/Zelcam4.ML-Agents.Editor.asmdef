@@ -4,7 +4,8 @@
     "references": [
         "Unity.Sentis",
         "Zelcam4.ML-Agents",
-        "Zelcam4.ML-Agents.CommunicatorObjects"
+        "Zelcam4.ML-Agents.CommunicatorObjects",
+        "Unity.EditorCoroutines.Editor"
     ],
     "includePlatforms": [
         "Editor"
