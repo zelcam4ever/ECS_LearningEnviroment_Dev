@@ -12,8 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Unity.MLAgents.CommunicatorObjects;
-
-using Unity.MLAgents.SideChannels;
 using Google.Protobuf;
 using Unity.Entities;
 using Unity.MLAgents;
@@ -222,7 +220,7 @@ namespace Unity.MLAgents
 
         void UpdateEnvironmentWithInput(UnityRLInputProto rlInput)
         {
-            SideChannelManager.ProcessSideChannelData(rlInput.SideChannel.ToArray());
+            //SideChannelManager.ProcessSideChannelData(rlInput.SideChannel.ToArray());
             SendCommandEvent(rlInput.Command);
         }
 
@@ -379,8 +377,8 @@ namespace Unity.MLAgents
                 message.RlInitializationOutput = tempUnityRlInitializationOutput;
             }
 
-            byte[] messageAggregated = SideChannelManager.GetSideChannelMessage();
-            message.RlOutput.SideChannel = ByteString.CopyFrom(messageAggregated);
+            //byte[] messageAggregated = SideChannelManager.GetSideChannelMessage();
+            //message.RlOutput.SideChannel = ByteString.CopyFrom(messageAggregated);
 
             var input = Exchange(message);
             UpdateSentActionSpec(tempUnityRlInitializationOutput);
