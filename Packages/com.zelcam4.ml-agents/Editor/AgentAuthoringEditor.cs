@@ -1,6 +1,5 @@
 using Zelcam4.MLAgents;
 using UnityEditor;
-using UnityEngine;
 
 [CustomEditor(typeof(AgentAutoring))]
 [CanEditMultipleObjects]
