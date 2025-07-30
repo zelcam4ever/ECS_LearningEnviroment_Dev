@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 using Unity.Transforms;
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
