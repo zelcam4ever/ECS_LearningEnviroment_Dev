@@ -4,13 +4,11 @@ using UnityEngine;
 
 namespace Zelcam4.MLAgents
 {
-    public class AgentAutoring: MonoBehaviour
+    public class AgentAuthoring: MonoBehaviour
     {
         public string behaviourName = "a";
         public int maxStep;
         
-        [Header("Observations")]
-        public ObservationSourceType[] observationSetup;
         
         [Header("Actions")]
         [Tooltip("The number of continuous actions the agent can take.")]
@@ -48,9 +46,9 @@ namespace Zelcam4.MLAgents
         public Transform target;
         public Transform groundRender;
         
-        private class Baker : Baker<AgentAutoring>
+        private class Baker : Baker<AgentAuthoring>
         {
-            public override void Bake(AgentAutoring authoring)
+            public override void Bake(AgentAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 
@@ -62,17 +60,6 @@ namespace Zelcam4.MLAgents
                     Target = GetEntity(authoring.target, TransformUsageFlags.Dynamic),
                     GoundRender = GetEntity(authoring.groundRender, TransformUsageFlags.None),
                 });
-                
-                // Observation baking
-                DynamicBuffer<ObservationValue> observations = AddBuffer<ObservationValue>(entity);
-                observations.ResizeUninitialized(authoring.observationSetup.Length);
-                
-                DynamicBuffer<ObservationSource> sources = AddBuffer<ObservationSource>(entity);
-                sources.Capacity = authoring.observationSetup.Length;
-                foreach (var sourceType in authoring.observationSetup)
-                {
-                    sources.Add(new ObservationSource { SourceType = sourceType });
-                }
                 
                 // Policy baking
                 AddComponent(entity, new RemotePolicy());

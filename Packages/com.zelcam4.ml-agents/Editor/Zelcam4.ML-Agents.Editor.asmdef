@@ -2,12 +2,10 @@
     "name": "Zelcam4.ML-Agents.Editor",
     "rootNamespace": "",
     "references": [
-        "Unity.ML-Agents",
-        "Unity.ML-Agents.CommunicatorObjects",
         "Unity.Sentis",
-        "Zelcam4.ML-Agents.DOTS",
         "Zelcam4.ML-Agents",
-        "Zelcam4.ML-Agents.CommunicatorObjects"
+        "Zelcam4.ML-Agents.CommunicatorObjects",
+        "Unity.EditorCoroutines.Editor"
     ],
     "includePlatforms": [
         "Editor"

@@ -1,6 +1,4 @@
 using Unity.Entities;
-using Zelcam4.MLAgents;
-using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents
@@ -14,9 +12,8 @@ namespace Zelcam4.MLAgents
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<AcademyTraining>();
-            state.RequireForUpdate<Training>();
         }
-    
+
         public void OnUpdate(ref SystemState state)
         {
             var academyStepCount = GetSingleton<AcademyTraining>().StepCount;

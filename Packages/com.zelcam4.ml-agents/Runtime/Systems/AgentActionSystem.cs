@@ -13,11 +13,6 @@ namespace Zelcam4.MLAgents
     [UpdateAfter(typeof(DecideActionSystem))]
     public partial struct AgentActionSystem : ISystem
     {
-        public void OnCreate(ref SystemState state)
-        {
-            state.RequireForUpdate<Training>(); 
-        }
-
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {

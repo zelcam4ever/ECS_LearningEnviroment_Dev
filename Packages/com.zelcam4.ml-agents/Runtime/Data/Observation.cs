@@ -12,14 +12,25 @@ namespace Zelcam4.MLAgents
         public static implicit operator ObservationValue(float f) { return new ObservationValue { Value = f }; }
     }
     
-    public enum ObservationSourceType
+    /// <summary>
+    /// A generic request to observe a value from a component of type T.
+    /// </summary>
+    public struct ObservationRequest<T> : IBufferElementData where T : IComponentData
     {
-        PositionX, PositionY, PositionZ,
-        PositionXTarget, PositionYTarget, PositionZTarget
+        // ID to define which value to get from the component T
+        public byte SourceSubId;
+
+        // The index in the final observation buffer where this value should be written
+        public int TargetIndex;
     }
     
-    public struct ObservationSource : IBufferElementData
+
+    /// <summary>
+    /// Interface for a struct that knows how to extract a float value
+    /// from a component of type T based on a sub-ID.
+    /// </summary>
+    public interface IObservationExtractor<T> where T : IComponentData
     {
-        public ObservationSourceType SourceType;
+        float Extract(in T component, byte sourceSubId);
     }
 }

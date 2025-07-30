@@ -14,12 +14,6 @@ namespace Zelcam4.MLAgents
     [UpdateAfter(typeof(RewardSystem))]
     public partial struct EpisodeCompletedSystem : ISystem
     {
-        public void OnCreate(ref SystemState state)
-        {
-            state.RequireForUpdate<AcademyTraining>();
-            state.RequireForUpdate<Training>();
-        }
-    
         public void OnUpdate(ref SystemState state)
         {
             foreach (var (agent,observation) in Query<RefRW<AgentEcs>, DynamicBuffer<ObservationValue>>())
