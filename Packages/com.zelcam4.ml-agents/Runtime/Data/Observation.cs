@@ -22,4 +22,26 @@ namespace Zelcam4.MLAgents
     {
         public ObservationSourceType SourceType;
     }
+    
+    /// <summary>
+    /// A generic request to observe a value from a component of type T.
+    /// </summary>
+    public struct ObservationRequest<T> : IBufferElementData where T : IComponentData
+    {
+        // ID to define which value to get from the component T
+        public byte SourceSubId;
+
+        // The index in the final observation buffer where this value should be written
+        public int TargetIndex;
+    }
+    
+
+    /// <summary>
+    /// Interface for a struct that knows how to extract a float value
+    /// from a component of type T based on a sub-ID.
+    /// </summary>
+    public interface IObservationExtractor<T> where T : IComponentData
+    {
+        float Extract(in T component, byte sourceSubId);
+    }
 }
