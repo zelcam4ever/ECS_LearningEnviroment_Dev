@@ -146,10 +146,10 @@ public static class CommunicatorManager
         Communicator.DecideBatch();
     }
     
-    public static Dictionary<int, ActionBuffers> GetActionsForBrain(FixedString32Bytes brainName)
+    public static Dictionary<int, AgentAction> GetActionsForBrain(FixedString32Bytes brainName)
     {
         var dicActions = Communicator?.GetActionsForBrain(brainName.ToString());
-        return dicActions ?? new Dictionary<int, ActionBuffers>();
+        return dicActions ?? new Dictionary<int, AgentAction>();
     }
 }
 }

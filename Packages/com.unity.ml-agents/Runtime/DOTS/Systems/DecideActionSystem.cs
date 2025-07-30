@@ -3,6 +3,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
 using UnityEngine;
 
 
@@ -41,8 +42,8 @@ namespace Zelcam4.MLAgents.DOTS
 
                 foreach (var (agentId, actionBuffer) in actionsForThisBrain)
                 {
-                    foreach (var val in actionBuffer.ContinuousActions.Array) { _jobDataCache.ContinuousActions.Add(val); }
-                    foreach (var val in actionBuffer.DiscreteActions.Array) { _jobDataCache.DiscreteActions.Add(val); }
+                    foreach (var val in actionBuffer.ContinuousActions) { _jobDataCache.ContinuousActions.Add(val); }
+                    foreach (var val in actionBuffer.DiscreteActions) { _jobDataCache.DiscreteActions.Add(val); }
                     
                     nativeActions.Add(agentId, _jobDataCache);
                     _jobDataCache.ContinuousActions.Clear();

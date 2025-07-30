@@ -74,22 +74,8 @@ namespace Unity.MLAgents
         /// <summary>
         /// Convert a ActionSpec struct to a ActionSpecProto.
         /// </summary>
-        /// <param name="actionSpec">An instance of an action spec struct.</param>
+        /// <param name="actionStructure">An instance of an action spec struct.</param>
         /// <returns>An ActionSpecProto.</returns>
-        public static ActionSpecProto ToActionSpecProto(this ActionSpec actionSpec)
-        {
-            var actionSpecProto = new ActionSpecProto
-            {
-                NumContinuousActions = actionSpec.NumContinuousActions,
-                NumDiscreteActions = actionSpec.NumDiscreteActions,
-            };
-            if (actionSpec.BranchSizes != null)
-            {
-                actionSpecProto.DiscreteBranchSizes.AddRange(actionSpec.BranchSizes);
-            }
-            return actionSpecProto;
-        }
-
         public static ActionSpecProto ToActionSpecProto(this ActionsStructure actionStructure)
         {
             var actionSpecProto = new ActionSpecProto
@@ -97,7 +83,13 @@ namespace Unity.MLAgents
                 NumContinuousActions = actionStructure.NumContinuousActions,
                 NumDiscreteActions = actionStructure.NumDiscreteActions,
             };
-            actionSpecProto.DiscreteBranchSizes.AddRange(actionStructure.DiscreteBranchSizes);
+            
+            var branches = actionStructure.DiscreteBranchSizes;
+            // Loop through the FixedList and add each element one by one.
+            foreach (var t in branches)
+            {
+                actionSpecProto.DiscreteBranchSizes.Add(t);
+            }
             return actionSpecProto;
         }
 
@@ -105,7 +97,7 @@ namespace Unity.MLAgents
 
         
 
-        public static UnityRLInitParameters ToUnityRLInitParameters(this UnityRLInitializationInputProto inputProto)
+        public static UnityRLInitParameters ToUnityRlInitParameters(this UnityRLInitializationInputProto inputProto)
         {
             return new UnityRLInitParameters
             {
@@ -118,21 +110,42 @@ namespace Unity.MLAgents
         }
 
         #region AgentAction
-        public static List<ActionBuffers> ToAgentActionList(this UnityRLInputProto.Types.ListAgentActionProto proto)
+
+        public static List<AgentAction> ToAgentActionList(this UnityRLInputProto.Types.ListAgentActionProto proto)
         {
-            var agentActions = new List<ActionBuffers>(proto.Value.Count);
+            var agentActions = new List<AgentAction>(proto.Value.Count);
             foreach (var ap in proto.Value)
             {
-                agentActions.Add(ap.ToActionBuffers());
+                agentActions.Add(ap.ToAgentAction());
             }
             return agentActions;
         }
-
-        public static ActionBuffers ToActionBuffers(this AgentActionProto proto)
+        public static AgentAction ToAgentAction(this AgentActionProto proto)
         {
-            return new ActionBuffers(proto.ContinuousActions.ToArray(), proto.DiscreteActions.ToArray());
-        }
+            var agentAction = new AgentAction();
+            
+            var continuousActionsArray = proto.ContinuousActions.ToArray();
+            
+            if (continuousActionsArray.Length <= agentAction.ContinuousActions.Capacity)
+            {
+                foreach (var action in continuousActionsArray)
+                {
+                    agentAction.ContinuousActions.Add(action);
+                }
+            }
+            
+            var discreteActionsArray = proto.DiscreteActions.ToArray();
+            
+            if (discreteActionsArray.Length <= agentAction.DiscreteActions.Capacity)
+            {
+                foreach (var action in discreteActionsArray)
+                {
+                    agentAction.DiscreteActions.Add(action);
+                }
+            }
 
+            return agentAction;
+        }
         #endregion
 
         #region Observations

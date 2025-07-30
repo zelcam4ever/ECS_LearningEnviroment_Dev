@@ -11,12 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Unity.MLAgents.Actuators;
 using Unity.MLAgents.CommunicatorObjects;
 
 using Unity.MLAgents.SideChannels;
 using Google.Protobuf;
 using Unity.Entities;
+using Unity.MLAgents;
+using Unity.MLAgents.Actuators;
+
 
 
 namespace Unity.MLAgents
@@ -39,8 +41,8 @@ namespace Unity.MLAgents
         UnityRLOutputProto m_CurrentUnityRlOutput =
             new UnityRLOutputProto();
 
-        Dictionary<string, Dictionary<int, ActionBuffers>> m_LastActionsReceived =
-            new Dictionary<string, Dictionary<int, ActionBuffers>>();
+        Dictionary<string, Dictionary<int, AgentAction>> m_LastActionsReceived =
+            new Dictionary<string, Dictionary<int, AgentAction>>();
 
         // Brains that we have sent over the communicator with agents.
         HashSet<string> m_SentBrainKeys = new HashSet<string>();
@@ -188,7 +190,7 @@ namespace Unity.MLAgents
             }
 
             UpdateEnvironmentWithInput(input.RlInput);
-            initParametersOut = initializationInput.RlInitializationInput.ToUnityRLInitParameters();
+            initParametersOut = initializationInput.RlInitializationInput.ToUnityRlInitParameters();
             // Be sure to shut down the grpc channel when the application is quitting.
             Application.quitting += NotifyQuitAndShutDownChannel;
             return true;
@@ -352,9 +354,9 @@ namespace Unity.MLAgents
             }
             if (!m_LastActionsReceived.ContainsKey(behaviorName))
             {
-                m_LastActionsReceived[behaviorName] = new Dictionary<int, ActionBuffers>();
+                m_LastActionsReceived[behaviorName] = new Dictionary<int, AgentAction>();
             }
-            m_LastActionsReceived[behaviorName][info.EpisodeId] = ActionBuffers.Empty;
+            m_LastActionsReceived[behaviorName][info.EpisodeId] = new AgentAction();
             if (info.Done)
             {
                 m_LastActionsReceived[behaviorName].Remove(info.EpisodeId);
@@ -426,18 +428,6 @@ namespace Unity.MLAgents
                 m_OrderedAgentsRequestingDecisions[brainName].Clear();
             }
         }
-
-        public ActionBuffers GetActions(string behaviorName, int agentId)
-        {
-            if (m_LastActionsReceived.ContainsKey(behaviorName))
-            {
-                if (m_LastActionsReceived[behaviorName].ContainsKey(agentId))
-                {
-                    return m_LastActionsReceived[behaviorName][agentId];
-                }
-            }
-            return ActionBuffers.Empty;
-        }
         
         /// <summary>
         /// Retrieves the entire dictionary of actions for a given brain name.
@@ -445,7 +435,7 @@ namespace Unity.MLAgents
         /// </summary>
         /// <param name="brainName">The fully qualified behavior name of the brain.</param>
         /// <returns>A dictionary mapping agent IDs to their actions, or null if not found.</returns>
-        public Dictionary<int, ActionBuffers> GetActionsForBrain(string brainName)
+        public Dictionary<int, AgentAction> GetActionsForBrain(string brainName)
         {
             return m_LastActionsReceived.GetValueOrDefault(brainName);
         }
