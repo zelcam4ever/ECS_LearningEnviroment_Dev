@@ -7,8 +7,11 @@ using Unity.Jobs;
 namespace Zelcam4.MLAgents
 {
     
+    //Partial class defined to allow for generic type arguments in attributes (UpdateAfter)
     [UpdateAfter(typeof(IncrementStepSystem))]
-    public partial struct ObservationCollectionSystem : ISystem
+    public partial class ObservationCollectionGroup : ComponentSystemGroup {}
+    
+    [UpdateInGroup(typeof(ObservationCollectionGroup))]
     public partial class ObservationCollectionSystem<T, TExtractor> : SystemBase
         where T : unmanaged, IComponentData
         where TExtractor : struct, IObservationExtractor<T>

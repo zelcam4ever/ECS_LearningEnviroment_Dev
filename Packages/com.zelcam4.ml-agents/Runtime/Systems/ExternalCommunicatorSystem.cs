@@ -9,8 +9,7 @@ using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents
 {
-    //RequestDecision() in RemotePolicy
-    [UpdateAfter(typeof(ObservationCollectionSystem))]
+    [UpdateAfter(typeof(ObservationCollectionGroup))]
     public partial class ExternalCommunicatorSystem : SystemBase
     {
         protected override void OnUpdate()

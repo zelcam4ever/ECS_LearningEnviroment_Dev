@@ -9,6 +9,7 @@ using Zelcam4.MLAgents;
 
 public class AgentAuthoring : MonoBehaviour
 {
+    [Header("Observations")]
     // Expose lists for each observation type in the Inspector.
     public List<TransformConfig> TransformObservations;
     

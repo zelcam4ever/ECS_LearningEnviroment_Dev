@@ -5,6 +5,7 @@ using Zelcam4.MLAgents;
 using Unity.Entities;
 
 [BurstCompile]
+[UpdateInGroup(typeof(ObservationCollectionGroup))]
 public partial class ExampleVelocityObservationSystem : SystemBase
 {
     private EntityQuery _queryTransform;
