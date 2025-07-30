@@ -4,7 +4,7 @@ using System.Linq;
 using Zelcam4.MLAgents.CommunicatorObjects;
 using System.Runtime.CompilerServices;
 using Unity.Entities;
-using Zelcam4.MLAgents.Actuators;
+
 
 [assembly: InternalsVisibleTo("Zelcam4.ML-Agents.Editor")]
 [assembly: InternalsVisibleTo("Zelcam4.ML-Agents.Editor.Tests")]

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Zelcam4.MLAgents;
-using Zelcam4.MLAgents.Actuators;
+
 
 using UnityEngine;
 using static Unity.Entities.SystemAPI;
