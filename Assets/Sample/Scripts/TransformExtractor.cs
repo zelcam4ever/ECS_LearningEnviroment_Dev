@@ -2,14 +2,14 @@ using Unity.Entities;
 using Unity.Transforms;
 using Zelcam4.MLAgents;
 
-// Define simple, reusable config structs inside this class.
+// Define config structs inside this class
 [System.Serializable]
 public struct TransformConfig
 {
     public TransformSourceId SourceType;
 }
 
-// Define clear, readable IDs for the different values within LocalTransform.
+// Define IDs for the different values within LocalTransform
 public enum TransformSourceId : byte
 {
     PositionX = 0,

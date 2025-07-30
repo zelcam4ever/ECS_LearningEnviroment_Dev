@@ -1,34 +1,34 @@
 using Unity.Burst;
 using Unity.Collections;
+using Unity.Entities;
 using Unity.Transforms;
 using Zelcam4.MLAgents;
-using Unity.Entities;
 
 [BurstCompile]
 [UpdateInGroup(typeof(ObservationCollectionGroup))]
-public partial class ExampleVelocityObservationSystem : SystemBase
+public partial struct ExampleVelocityObservationSystem : ISystem
 {
-    private EntityQuery _queryTransform;
-    
-    protected override void OnCreate()
+    private EntityQuery _query;
+
+    [BurstCompile]
+    public void OnCreate(ref SystemState state)
     {
-        _queryTransform = new EntityQueryBuilder(Allocator.Temp)
+        _query = new EntityQueryBuilder(Allocator.Temp)
             .WithAll<ObservationValue, ObservationRequest<LocalTransform>, LocalTransform>()
-            .Build(this);
+            .Build(ref state);
     }
 
-
-    protected override void OnUpdate()
+    [BurstCompile]
+    public void OnUpdate(ref SystemState state)
     {
-        var jobTransform = new GatherJob<LocalTransform, TransformExtractor>
+        var job = new GatherJob<LocalTransform, TransformExtractor>
         {
-            FinalObservationBufferHandle = GetBufferTypeHandle<ObservationValue>(false),
-            RequestsHandle = GetBufferTypeHandle<ObservationRequest<LocalTransform>>(true),
-            SourceComponentHandle = GetComponentTypeHandle<LocalTransform>(true),
+            FinalObservationBufferHandle = state.GetBufferTypeHandle<ObservationValue>(false),
+            RequestsHandle = state.GetBufferTypeHandle<ObservationRequest<LocalTransform>>(true),
+            SourceComponentHandle = state.GetComponentTypeHandle<LocalTransform>(true),
             Extractor = default
         };
         
-        Dependency = jobTransform.ScheduleParallel(_queryTransform, Dependency);
-
+        state.Dependency = job.ScheduleParallel(_query, state.Dependency);
     }
 }
