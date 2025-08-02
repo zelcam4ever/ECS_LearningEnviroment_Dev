@@ -7,8 +7,6 @@ namespace Zelcam4.MLAgents
         public float Reward;
         public float GroupReward;
         public float CumulativeReward;
-        public bool RequestAction;   
-        public bool RequestDecision; 
         public int MaxStep;
         public int StepCount;
         public int CompletedEpisodes;

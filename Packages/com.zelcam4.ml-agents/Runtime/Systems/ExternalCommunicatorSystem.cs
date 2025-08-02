@@ -16,11 +16,9 @@ namespace Zelcam4.MLAgents
         {
             
             foreach (var (agent, policy, actionsStructure, observations) in
-                     Query<RefRW<AgentEcs>, RefRO<BrainSimple>, RefRO<ActionsStructure>,DynamicBuffer<ObservationValue>>()
-                         .WithAll<RemotePolicy>())
+                     Query<RefRW<AgentEcs>, RefRO<BrainSimple>, RefRO<ActionsStructure>, DynamicBuffer<ObservationValue>>()
+                         .WithAll<RemotePolicy,RequestDecisionTag>())
             {
-                if (!agent.ValueRO.RequestDecision) continue;
-
                 // Will try to subscribe the same brain multiple times, but we can assure all agents try at least once 
                 if (!agent.ValueRO.Initialized)
                 {

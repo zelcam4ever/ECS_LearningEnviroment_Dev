@@ -24,8 +24,6 @@ namespace Zelcam4.MLAgents
                 agent.ValueRW.Reward = 0f;
                 agent.ValueRW.GroupReward = 0f;
                 agent.ValueRW.CumulativeReward = 0f;
-                agent.ValueRW.RequestAction = false;
-                agent.ValueRW.RequestDecision = false;
                 agent.ValueRW.StepCount = 0;
                 agent.ValueRW.Done = false;
                 agent.ValueRW.MaxStepReached = false;

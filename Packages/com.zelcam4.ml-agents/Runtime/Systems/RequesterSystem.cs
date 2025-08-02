@@ -16,19 +16,22 @@ namespace Zelcam4.MLAgents
 
         public void OnUpdate(ref SystemState state)
         {
+            var ecb = GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
+                .CreateCommandBuffer(state.World.Unmanaged);
+            
             var academyStepCount = GetSingleton<AcademyTraining>().StepCount;
-            foreach (var (agent, decisionRequest) in Query<RefRW<AgentEcs>, RefRO<DecisionRequest>>())
+
+
+            foreach (var (decisionRequest, entity) in Query<RefRO<DecisionRequest>>().WithEntityAccess())
             {
                 if (academyStepCount % decisionRequest.ValueRO.DecisionPeriod == decisionRequest.ValueRO.DecisionStep)
                 {
-                    agent.ValueRW.RequestDecision = true;
-                    agent.ValueRW.RequestAction = true;
-                    continue;
+                    ecb.AddComponent<RequestDecisionTag>(entity);
+                    ecb.AddComponent<RequestActionTag>(entity);
                 }
-
-                if (decisionRequest.ValueRO.TakeActionsBetweenDecisions)
+                else if (decisionRequest.ValueRO.TakeActionsBetweenDecisions)
                 {
-                    agent.ValueRW.RequestAction = true;
+                    ecb.AddComponent<RequestActionTag>(entity);
                 }
             }
         }

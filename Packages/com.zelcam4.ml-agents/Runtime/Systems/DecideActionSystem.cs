@@ -18,11 +18,10 @@ namespace Zelcam4.MLAgents
             var uniqueBrainNames = new NativeHashSet<FixedString32Bytes>(16, Allocator.Temp);
             
             // We search for the N brains once, and then we iterate over each one. Doing so we avoid doing string lookups for each agent
-            foreach (var (brain, agent) in SystemAPI.Query<RefRO<BrainSimple>, RefRW<AgentEcs>>())
+            foreach (var (brain, agent) in 
+                     SystemAPI.Query<RefRO<BrainSimple>, RefRW<AgentEcs>>().WithAll<RequestDecisionTag>())
             {
-                if(!agent.ValueRO.RequestDecision) continue;
                 uniqueBrainNames.Add(brain.ValueRO.FullyQualifiedBehaviorName.Value);
-                agent.ValueRW.RequestDecision = false;
             }
 
             if (uniqueBrainNames.Count == 0) return;
