@@ -15,10 +15,7 @@ namespace Sample.Scripts
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var job = new CalculateRewardJob
-            {
-                TransformLookup = GetComponentLookup<LocalTransform>(true)
-            };
+            var job = new CalculateRewardJob();
         
             state.Dependency = job.ScheduleParallel(state.Dependency);
         }
@@ -27,14 +24,11 @@ namespace Sample.Scripts
     [BurstCompile]
     public partial struct CalculateRewardJob : IJobEntity
     {
-        [ReadOnly]
-        public ComponentLookup<LocalTransform> TransformLookup;
-
-        private void Execute(ref AgentEcs agent, in LocalTransform transform)
+        private void Execute(ref AgentEcs agent, in LocalTransform transform, in CustomObservation observation)
         {
             var reward = 0f;
             
-            var targetPosition = TransformLookup[agent.Target].Position;
+            var targetPosition = observation.Position;
             if (math.distance(transform.Position, targetPosition) < 0.5f)
             {
                 reward = 100f;
