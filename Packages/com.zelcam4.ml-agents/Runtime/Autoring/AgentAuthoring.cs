@@ -15,7 +15,7 @@ namespace Zelcam4.MLAgents
         public int numContinuousActions = 0;
 
         [Tooltip("An array defining the size of each discrete action branch.")]
-        public int[] discreteBranchSizes;
+        public int[] discreteBranchSizes = Array.Empty<int>();
 
 
         public bool decisionRequester = true;
