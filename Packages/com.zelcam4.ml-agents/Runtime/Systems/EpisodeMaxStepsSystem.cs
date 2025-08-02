@@ -12,12 +12,12 @@ using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents
 {
-    [UpdateAfter(typeof(RewardSystem))]
+    [UpdateAfter(typeof(RewardGroup))]
     [UpdateInGroup(typeof(LateSimulationSystemGroup))]
     public partial class EpisodeCompletedGroup : ComponentSystemGroup {}
     
-    [UpdateInGroup(typeof(ActionSystemGroup))]
     [BurstCompile]
+    [UpdateInGroup(typeof(ActionSystemGroup))]
     public partial struct EpisodeMaxStepsSystem : ISystem
     {
         [BurstCompile]
