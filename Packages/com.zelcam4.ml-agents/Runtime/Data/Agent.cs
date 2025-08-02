@@ -24,4 +24,6 @@ namespace Zelcam4.MLAgents
         public Entity Target;
         public Entity GoundRender;
     }
+    
+    public struct EpisodeCompletedTag : IComponentData {}
 }

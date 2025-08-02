@@ -6,7 +6,7 @@ using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents
 {
-    [UpdateAfter(typeof(AgentActionSystem))]
+    [UpdateAfter(typeof(ActionSystemGroup))]
     public partial struct RewardSystem : ISystem
     {
         public void OnUpdate(ref SystemState state)

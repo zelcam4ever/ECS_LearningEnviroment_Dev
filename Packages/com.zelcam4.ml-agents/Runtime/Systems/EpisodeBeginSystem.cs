@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Zelcam4.MLAgents
 {
-    [UpdateAfter(typeof(AgentResetSystem))]
+    [UpdateAfter(typeof(TagResetGroup))]
     public partial struct EpisodeBeginSystem : ISystem
     {
         public void OnUpdate(ref SystemState state)
