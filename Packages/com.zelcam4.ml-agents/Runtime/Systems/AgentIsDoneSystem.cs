@@ -4,8 +4,8 @@ using Unity.Entities;
 namespace Zelcam4.MLAgents
 {
     // Needed to set the done flag for PyTorch training
-    [UpdateAfter(typeof(EpisodeCompletedGroup))]
     [BurstCompile]
+    [UpdateAfter(typeof(EpisodeCompletedGroup))]
     public partial struct AgentIsDoneSystem : ISystem
     {
         [BurstCompile]

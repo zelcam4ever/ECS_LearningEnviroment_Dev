@@ -26,7 +26,6 @@ namespace Zelcam4.MLAgents
     {
         private void Execute(ref AgentEcs agent, in EndEpisodeTag tag)
         {
-            agent.Done = true;
             agent.CompletedEpisodes += 1;
             agent.Reward = 0f;
             agent.GroupReward = 0f;
