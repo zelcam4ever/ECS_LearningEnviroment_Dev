@@ -1,5 +1,4 @@
 using Unity.Entities;
-using Unity.Mathematics;
 
 namespace Zelcam4.MLAgents
 {

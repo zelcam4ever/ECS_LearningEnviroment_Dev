@@ -1,11 +1,6 @@
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
-using Zelcam4.MLAgents;
-
-using UnityEngine;
-
 
 namespace Zelcam4.MLAgents
 {

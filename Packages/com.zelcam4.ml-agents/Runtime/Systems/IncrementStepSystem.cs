@@ -1,7 +1,4 @@
-using Unity.Burst;
 using Unity.Entities;
-using Zelcam4.MLAgents;
-using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents

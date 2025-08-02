@@ -1,12 +1,5 @@
-using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Entities;
-using Unity.Mathematics;
-using Zelcam4.MLAgents;
-
-using Unity.Rendering;
-using Unity.Transforms;
-using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 
