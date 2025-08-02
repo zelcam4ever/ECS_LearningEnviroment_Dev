@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace Zelcam4.MLAgents
 {
-    [UpdateAfter(typeof(EpisodeCompleteGroup))]
+    [UpdateAfter(typeof(EpisodeCompletedGroup))]
     public partial class TagResetGroup : ComponentSystemGroup {}
     
     // Reset EpisodeCompletedTag
@@ -16,9 +16,9 @@ namespace Zelcam4.MLAgents
             
             foreach (var (agent, entity) in 
                      SystemAPI.Query<RefRO<AgentEcs>>().WithEntityAccess()
-                         .WithAny<EpisodeCompletedTag>())
+                         .WithAny<EndEpisodeTag>())
             {
-                ecb.RemoveComponent<EpisodeCompletedTag>(entity);
+                ecb.RemoveComponent<EndEpisodeTag>(entity);
             }
         }
     }

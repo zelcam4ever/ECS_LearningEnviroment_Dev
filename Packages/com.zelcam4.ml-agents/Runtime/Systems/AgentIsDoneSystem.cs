@@ -3,9 +3,10 @@ using Unity.Entities;
 
 namespace Zelcam4.MLAgents
 {
-    [UpdateAfter(typeof(EpisodeCompleteGroup))]
+    // Needed to set the done flag for PyTorch training
+    [UpdateAfter(typeof(EpisodeCompletedGroup))]
     [BurstCompile]
-    public partial struct AgentIsDoneSystem
+    public partial struct AgentIsDoneSystem : ISystem
     {
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
@@ -19,7 +20,7 @@ namespace Zelcam4.MLAgents
     [BurstCompile]
     public partial struct SetDoneFlagJob : IJobEntity
     {
-        private void Execute(ref AgentEcs agent, in EpisodeCompletedTag tag)
+        private void Execute(ref AgentEcs agent, in EndEpisodeTag tag)
         {
             agent.Done = true;
         }

@@ -13,7 +13,8 @@ using static Unity.Entities.SystemAPI;
 namespace Zelcam4.MLAgents
 {
     [UpdateAfter(typeof(RewardSystem))]
-    public partial class EpisodeCompleteGroup : ComponentSystemGroup {}
+    [UpdateInGroup(typeof(LateSimulationSystemGroup))]
+    public partial class EpisodeCompletedGroup : ComponentSystemGroup {}
     
     [UpdateInGroup(typeof(ActionSystemGroup))]
     [BurstCompile]
@@ -42,7 +43,7 @@ namespace Zelcam4.MLAgents
             if (agent.MaxStep > 0 && agent.StepCount >= agent.MaxStep)
             {
                 agent.MaxStepReached = true;
-                ECB.AddComponent<EpisodeCompletedTag>(entityInQueryIndex, entity);
+                ECB.AddComponent<EndEpisodeTag>(entityInQueryIndex, entity);
             }
         }
     }
