@@ -20,10 +20,8 @@ namespace Zelcam4.MLAgents
         public bool MaxStepReached;
         public bool Done;
         public bool StartingEpisode;
-
-        public Entity Target;
-        public Entity GoundRender;
     }
     
     public struct EndEpisodeTag : IComponentData {}
+    public struct EpisodeBeginTag : IComponentData {}
 }
