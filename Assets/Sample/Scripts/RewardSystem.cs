@@ -1,3 +1,5 @@
+using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -7,23 +9,43 @@ using static Unity.Entities.SystemAPI;
 namespace Sample.Scripts
 {
     [UpdateInGroup(typeof(RewardGroup))]
+    [BurstCompile]
     public partial struct RewardSystem : ISystem
     {
+        [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (agent, transform) in Query<RefRW<AgentEcs>, RefRO<LocalTransform>>())
+            var job = new CalculateRewardJob
             {
-                float reward = 0f;
-                if (math.distance(transform.ValueRO.Position,
-                        GetComponent<LocalTransform>(agent.ValueRO.Target).Position) < 0.5f)
-                {
-                    reward = 100f;
-                }
-                else reward -= 0.1f;
+                TransformLookup = GetComponentLookup<LocalTransform>(true)
+            };
+        
+            state.Dependency = job.ScheduleParallel(state.Dependency);
+        }
+    }
 
-                agent.ValueRW.Reward += reward;
-                agent.ValueRW.CumulativeReward += reward;
+    [BurstCompile]
+    public partial struct CalculateRewardJob : IJobEntity
+    {
+        [ReadOnly]
+        public ComponentLookup<LocalTransform> TransformLookup;
+
+        private void Execute(ref AgentEcs agent, in LocalTransform transform)
+        {
+            var reward = 0f;
+            
+            var targetPosition = TransformLookup[agent.Target].Position;
+            if (math.distance(transform.Position, targetPosition) < 0.5f)
+            {
+                reward = 100f;
             }
+            else
+            {
+                reward = -0.1f;
+            }
+
+            agent.Reward += reward;
+            agent.CumulativeReward += reward;
         }
     }
 }
