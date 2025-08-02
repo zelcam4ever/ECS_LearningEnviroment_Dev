@@ -12,37 +12,32 @@ public partial struct CustomObservationFillUpSystem  : ISystem
     
     
     [BurstCompile]
-    public partial struct UpdateCustomObservationPositionSystem : ISystem
+    public void OnUpdate(ref SystemState state)
     {
-        [BurstCompile]
-        public void OnUpdate(ref SystemState state)
+        var job = new UpdateCustomObservationPositionJob
         {
-            var job = new UpdateCustomObservationPositionJob
-            {
-                TransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true)
-            };
+            TransformLookup = SystemAPI.GetComponentLookup<LocalTransform>(true)
+        };
             
-            state.Dependency = job.ScheduleParallel(state.Dependency);
-        }
+        state.Dependency = job.ScheduleParallel(state.Dependency);
     }
+}
+[BurstCompile]
+public partial struct UpdateCustomObservationPositionJob : IJobEntity
+{
+    [ReadOnly]
+    public ComponentLookup<LocalTransform> TransformLookup;
 
-    [BurstCompile]
-    public partial struct UpdateCustomObservationPositionJob : IJobEntity
+    private void Execute(ref CustomObservation observation)
     {
-        [ReadOnly]
-        public ComponentLookup<LocalTransform> TransformLookup;
+        var targetEntity = observation.Target;
 
-        private void Execute(ref CustomObservation observation)
+
+        if (targetEntity != Entity.Null && TransformLookup.HasComponent(targetEntity))
         {
-            var targetEntity = observation.Target;
 
-
-            if (targetEntity != Entity.Null && TransformLookup.HasComponent(targetEntity))
-            {
-
-                observation.Position = TransformLookup[targetEntity].Position;
-            }
-            else observation.Position = float3.zero;
+            observation.Position = TransformLookup[targetEntity].Position;
         }
+        else observation.Position = float3.zero;
     }
 }
