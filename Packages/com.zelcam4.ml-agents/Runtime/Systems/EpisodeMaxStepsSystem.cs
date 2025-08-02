@@ -9,7 +9,7 @@ namespace Zelcam4.MLAgents
     public partial class EpisodeCompletedGroup : ComponentSystemGroup {}
     
     [BurstCompile]
-    [UpdateInGroup(typeof(ActionSystemGroup))]
+    [UpdateInGroup(typeof(EpisodeCompletedGroup))]
     public partial struct EpisodeMaxStepsSystem : ISystem
     {
         [BurstCompile]

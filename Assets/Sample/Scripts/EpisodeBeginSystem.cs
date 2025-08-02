@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 namespace Sample.Scripts
 {
+    [UpdateAfter(typeof(InitializeEnvironmentSystem))]
     [UpdateBefore(typeof(RequesterSystem))]
     public partial struct EpisodeBeginSystem : ISystem
     {

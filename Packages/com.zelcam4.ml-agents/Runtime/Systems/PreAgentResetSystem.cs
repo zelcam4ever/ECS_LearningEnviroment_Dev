@@ -1,4 +1,5 @@
 using Unity.Entities;
+using UnityEngine;
 using static Unity.Entities.SystemAPI;
 
 namespace Zelcam4.MLAgents
@@ -15,7 +16,6 @@ namespace Zelcam4.MLAgents
                      Query<RefRW<AgentEcs>, RefRO<BrainSimple>, DynamicBuffer<ObservationValue>>()
                          .WithAll<RemotePolicy,EndEpisodeTag>())
             {
-                
                 CommunicatorManager.PutObservation(policy.ValueRO.FullyQualifiedBehaviorName.Value, agent.ValueRO, observations);
             }
         }

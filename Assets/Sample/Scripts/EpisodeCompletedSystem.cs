@@ -1,6 +1,8 @@
+using NUnit.Framework;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 using Zelcam4.MLAgents;
 
@@ -15,7 +17,7 @@ namespace Sample.Scripts
             var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
                 .CreateCommandBuffer(state.WorldUnmanaged);
             
-            var job = new TerminateOnMaxStepsJob
+            var job = new GoalReachedJob
             {
                 ECB = ecb.AsParallelWriter()
             };
@@ -28,12 +30,11 @@ namespace Sample.Scripts
     {
         public EntityCommandBuffer.ParallelWriter ECB;
 
-        private void Execute([ChunkIndexInQuery] int entityInQueryIndex, Entity entity, ref AgentEcs agent, in DynamicBuffer<ObservationValue> observations)
+        private void Execute([ChunkIndexInQuery] int entityInQueryIndex, Entity entity, ref AgentEcs agent, in LocalTransform transform, in CustomObservation observation)
         {
-            if (math.distance(new float2(observations[0].Value, observations[1].Value), 
-                    new float2(observations[2].Value, observations[3].Value)) < 0.5f)
+            var targetPosition = observation.Position;
+            if (math.distance(transform.Position, targetPosition) < 0.5f)
             {
-                agent.MaxStepReached = false;
                 ECB.AddComponent<EndEpisodeTag>(entityInQueryIndex, entity);
             }
         }

@@ -16,7 +16,6 @@ namespace Sample.Scripts
         {
             foreach (var (agent, visualFeedback) in Query<RefRO<AgentEcs>, RefRO<AgentVisualFeedback>>().WithAll<EndEpisodeTag>())
             {
-                Debug.Log("Max Step Reached: " + agent.ValueRO.MaxStepReached);
                 UpdateMeshMaterial(ref state, visualFeedback.ValueRO, agent.ValueRO.MaxStepReached);
             }
         }
@@ -24,7 +23,7 @@ namespace Sample.Scripts
         private void UpdateMeshMaterial(ref SystemState state, AgentVisualFeedback target, bool maxSteps)
         {
             var material = GetComponent<MaterialMeshInfo>(target.RendererEntity);
-            material.Material = maxSteps? -2 : -3;
+            material.Material = maxSteps? -2 : -1;
             SetComponent(target.RendererEntity, material);
         }
     }
