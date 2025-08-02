@@ -12,7 +12,7 @@ namespace Zelcam4.MLAgents
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.World.Unmanaged);
+                .CreateCommandBuffer(state.WorldUnmanaged);
             
             foreach (var (agent, entity) in 
                      SystemAPI.Query<RefRO<AgentEcs>>().WithEntityAccess()
@@ -30,7 +30,7 @@ namespace Zelcam4.MLAgents
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.World.Unmanaged);
+                .CreateCommandBuffer(state.WorldUnmanaged);
             
             foreach (var (agent, entity) in 
                      SystemAPI.Query<RefRO<AgentEcs>>().WithEntityAccess()

@@ -24,7 +24,7 @@ namespace Zelcam4.MLAgents
         public void OnUpdate(ref SystemState state)
         {
             var ecb = GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.World.Unmanaged);
+                .CreateCommandBuffer(state.WorldUnmanaged);
             
             var job = new TerminateOnMaxStepsJob
             {

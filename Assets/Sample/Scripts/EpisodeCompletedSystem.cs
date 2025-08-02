@@ -1,6 +1,7 @@
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using UnityEngine;
 using Zelcam4.MLAgents;
 
 namespace Sample.Scripts
@@ -12,7 +13,7 @@ namespace Sample.Scripts
         public void OnUpdate(ref SystemState state)
         {
             var ecb = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>()
-                .CreateCommandBuffer(state.World.Unmanaged);
+                .CreateCommandBuffer(state.WorldUnmanaged);
             
             var job = new TerminateOnMaxStepsJob
             {
