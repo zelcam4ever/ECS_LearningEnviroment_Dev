@@ -2,7 +2,6 @@ using Unity.Burst;
 using Unity.Burst.Intrinsics;
 using Unity.Collections;
 using Unity.Entities;
-using Unity.Jobs;
 
 namespace Zelcam4.MLAgents
 {
@@ -21,7 +20,7 @@ namespace Zelcam4.MLAgents
         protected override void OnCreate()
         {
             _query = new EntityQueryBuilder(Allocator.Temp)
-                .WithAll<ObservationValue, ObservationRequest<T>, T>()
+                .WithAll<RequestDecisionTag,ObservationValue, ObservationRequest<T>, T>()
                 .Build(this);
         }
 

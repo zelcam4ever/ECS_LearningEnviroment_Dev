@@ -1,5 +1,5 @@
+using System;
 using Unity.Entities;
-
 using UnityEngine;
 
 namespace Zelcam4.MLAgents
@@ -16,7 +16,7 @@ namespace Zelcam4.MLAgents
         public int numContinuousActions = 0;
 
         [Tooltip("An array defining the size of each discrete action branch.")]
-        public int[] discreteBranchSizes;
+        public int[] discreteBranchSizes = Array.Empty<int>();
 
 
         public bool decisionRequester = true;
@@ -41,11 +41,6 @@ namespace Zelcam4.MLAgents
         public bool takeActionsBetweenDecisions = true;
         
         
-        //Change from this component
-        [Header("Targets")]
-        public Transform target;
-        public Transform groundRender;
-        
         private class Baker : Baker<AgentAuthoring>
         {
             public override void Bake(AgentAuthoring authoring)
@@ -57,8 +52,6 @@ namespace Zelcam4.MLAgents
                 {
                     MaxStep = authoring.maxStep,
                     EpisodeId = EpisodeIdCounter.GetEpisodeId(),
-                    Target = GetEntity(authoring.target, TransformUsageFlags.Dynamic),
-                    GoundRender = GetEntity(authoring.groundRender, TransformUsageFlags.None),
                 });
                 
                 // Policy baking

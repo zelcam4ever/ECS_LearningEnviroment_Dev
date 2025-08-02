@@ -1,36 +1,28 @@
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using Zelcam4.MLAgents;
 
-using Unity.Transforms;
-using UnityEngine;
-using static Unity.Entities.SystemAPI;
-using Random = UnityEngine.Random;
-
-namespace Zelcam4.MLAgents
+namespace Sample.Scripts
 {
-    [UpdateAfter(typeof(DecideActionSystem))]
+    [UpdateInGroup(typeof(ActionSystemGroup))]
     public partial struct AgentActionSystem : ISystem
     {
         [BurstCompile]
         public void OnUpdate(ref SystemState state)
         {
-            var actionJob = new AgentActionJob();
-            state.Dependency = actionJob.ScheduleParallel(state.Dependency);
+            var job = new AgentActionJob();
+            state.Dependency = job.ScheduleParallel(state.Dependency);
         }
     }
     
     [BurstCompile]
     public partial struct AgentActionJob : IJobEntity
     {
-        private void Execute(ref AgentEcs agent, in AgentAction action, ref LocalTransform transform)
+        private void Execute(in AgentEcs agent, in AgentAction action, in RequestActionTag tag, ref LocalTransform transform)
         {
-            if (!agent.RequestAction) return;
-
-            agent.RequestAction = false;
             var actionsTaking = action.DiscreteActions;
-            
             
             float3 movement;
             if (actionsTaking.Length <= 0) return;

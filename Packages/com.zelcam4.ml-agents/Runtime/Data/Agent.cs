@@ -7,8 +7,6 @@ namespace Zelcam4.MLAgents
         public float Reward;
         public float GroupReward;
         public float CumulativeReward;
-        public bool RequestAction;   
-        public bool RequestDecision; 
         public int MaxStep;
         public int StepCount;
         public int CompletedEpisodes;
@@ -22,8 +20,8 @@ namespace Zelcam4.MLAgents
         public bool MaxStepReached;
         public bool Done;
         public bool StartingEpisode;
-
-        public Entity Target;
-        public Entity GoundRender;
     }
+    
+    public struct EndEpisodeTag : IComponentData {}
+    public struct EpisodeBeginTag : IComponentData {}
 }

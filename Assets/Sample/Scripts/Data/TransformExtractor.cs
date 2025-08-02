@@ -10,12 +10,8 @@ public struct TransformConfig
 }
 
 // Define IDs for the different values within LocalTransform
-public enum TransformSourceId : byte
-{
-    PositionX = 0,
-    PositionY = 1,
-    PositionZ = 2,
-}
+public enum TransformSourceId : byte { PositionX = 0, PositionY = 1, PositionZ = 2};
+
 public struct TransformExtractor : IObservationExtractor<LocalTransform>
 {
     public float Extract(in LocalTransform component, byte sourceSubId)

@@ -4,22 +4,19 @@ using Unity.Transforms;
 using System.Collections.Generic;
 using Zelcam4.MLAgents;
 
-// Register all the generic component types this authoring script can create.
-
-
-public class AgentAuthoring : MonoBehaviour
+public class ObservationsAuthoring : MonoBehaviour
 {
-    [Header("Observations")]
-    // Expose lists for each observation type in the Inspector.
+    [SerializeField]private Transform Target;
     public List<TransformConfig> TransformObservations;
+    public List<CustomObservationConfig> CustomObservations;
     
-    public class AgentObserverBaker : Baker<AgentAuthoring>
+    private class Baker : Baker<ObservationsAuthoring>
     {
-        public override void Bake(AgentAuthoring authoring)
+        public override void Bake(ObservationsAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             int currentIndex = 0; 
-
+            
             // Repeat for each configuration of observations 
             if (authoring.TransformObservations.Count > 0)
             {
@@ -27,6 +24,27 @@ public class AgentAuthoring : MonoBehaviour
                 foreach (var config in authoring.TransformObservations)
                 {
                     requestBuffer.Add(new ObservationRequest<LocalTransform>
+                    {
+                        SourceSubId = (byte)config.SourceType,
+                        TargetIndex = currentIndex
+                    });
+                    currentIndex++; // Increment the index for the next observation
+                }
+            }
+            
+            // Configuration for custom observation
+            AddComponent(entity, new CustomObservation() 
+            {
+                Target = GetEntity(authoring.Target, TransformUsageFlags.Dynamic),
+            });
+            
+            //Authoring for custom observations
+            if (authoring.CustomObservations.Count > 0)
+            {
+                var requestBuffer = AddBuffer<ObservationRequest<CustomObservation>>(entity);
+                foreach (var config in authoring.CustomObservations)
+                {
+                    requestBuffer.Add(new ObservationRequest<CustomObservation>
                     {
                         SourceSubId = (byte)config.SourceType,
                         TargetIndex = currentIndex
