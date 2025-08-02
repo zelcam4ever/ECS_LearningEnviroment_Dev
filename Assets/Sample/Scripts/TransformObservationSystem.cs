@@ -6,7 +6,7 @@ using Zelcam4.MLAgents;
 
 [BurstCompile]
 [UpdateInGroup(typeof(ObservationCollectionGroup))]
-public partial struct ExampleTransformObservationSystem  : ISystem
+public partial struct TransformObservationSystem  : ISystem
 {
     private EntityQuery _query;
 

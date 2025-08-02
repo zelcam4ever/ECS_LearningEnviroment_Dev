@@ -7,15 +7,15 @@ using Zelcam4.MLAgents;
 // Register all the generic component types this authoring script can create.
 
 
-public class AgentAuthoring : MonoBehaviour
+public class ObservationsAuthoring : MonoBehaviour
 {
     [Header("Observations")]
     // Expose lists for each observation type in the Inspector.
     public List<TransformConfig> TransformObservations;
     
-    public class AgentObserverBaker : Baker<AgentAuthoring>
+    public class AgentObserverBaker : Baker<ObservationsAuthoring>
     {
-        public override void Bake(AgentAuthoring authoring)
+        public override void Bake(ObservationsAuthoring authoring)
         {
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             int currentIndex = 0; 
