@@ -42,7 +42,7 @@ public class ObservationsAuthoring : MonoBehaviour
             if (authoring.CustomObservations.Count > 0)
             {
                 var requestBuffer = AddBuffer<ObservationRequest<CustomObservation>>(entity);
-                foreach (var config in authoring.TransformObservations)
+                foreach (var config in authoring.CustomObservations)
                 {
                     requestBuffer.Add(new ObservationRequest<CustomObservation>
                     {
