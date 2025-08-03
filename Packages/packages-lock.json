@@ -317,7 +317,11 @@
         "com.unity.sentis": "2.1.0",
         "com.unity.modules.imageconversion": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0",
-        "com.unity.modules.physics": "1.0.0"
+        "com.unity.modules.physics": "1.0.0",
+        "com.unity.burst": "1.8.18",
+        "com.unity.entities": "1.3.9",
+        "com.unity.collections": "2.5.2",
+        "com.unity.mathematics": "1.3.2"
       }
     },
     "com.unity.modules.accessibility": {

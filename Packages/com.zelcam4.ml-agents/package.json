@@ -8,13 +8,17 @@
     "com.unity.sentis": "2.1.0",
     "com.unity.modules.imageconversion": "1.0.0",
     "com.unity.modules.jsonserialize": "1.0.0",
-    "com.unity.modules.physics": "1.0.0"
+    "com.unity.modules.physics": "1.0.0",
+    "com.unity.burst": "1.8.18",
+    "com.unity.entities": "1.3.9",
+    "com.unity.collections": "2.5.2",
+    "com.unity.mathematics": "1.3.2"
   },
   "samples": [
     {
-      "displayName": "3D Ball",
-      "description": "The 3D Ball sample is a simple environment that is a great for jumping into ML-Agents to see how things work.",
-      "path": "Samples~/3DBall"
+      "displayName": "Basic",
+      "description": "Simple environment for jumping into ML-Agents DOTS package to see how things work.",
+      "path": "Samples~/Basic"
     }
   ],
   "_upm": {
