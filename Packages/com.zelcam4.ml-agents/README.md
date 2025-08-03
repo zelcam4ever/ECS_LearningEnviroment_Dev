@@ -1,4 +1,5 @@
-# com.unity.ml-agents
+# com.zelcam4.ml-agents
+This package is a version of the custom Unity package [ML-Agents](https://github.com/Unity-Technologies/ml-agents) framework built entirely on Unity's Data-Oriented Technology Stack (DOTS)
 
 ML-Agents is a Unity package that allows users to use state-of-the-art machine learning to create intelligent character behaviors in any Unity environment (games, robotics, film, etc.).
 
