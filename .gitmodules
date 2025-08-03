@@ -1,0 +1,3 @@
+[submodule "Packages/com.zelcam4.ml-agents"]
+	path = Packages/com.zelcam4.ml-agents
+	url = https://github.com/zelcam4ever/ml-agents-DOTS.git
